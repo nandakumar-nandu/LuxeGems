@@ -1,0 +1,38 @@
+# 📁 .gitignore
+# ⚙️ Git Version Control ignore patterns.
+# ⚠️ Ensure secrets and build folders are never checked in!
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js build output
+/.next/
+/out/
+
+# Production build
+/build
+
+# Testing
+/coverage
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🔒 Local environment and secret files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# TypeScript caches
+*.tsbuildinfo
+next-env.d.ts

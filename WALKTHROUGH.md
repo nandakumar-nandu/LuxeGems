@@ -1,0 +1,57 @@
+# Walkthrough & User Journey
+
+Welcome to the LuxeGems Store walkthrough. This document outlines the overall user walkthrough, planned features, and a diagram showing how a customer navigates the jewelry e-commerce experience.
+
+---
+
+## Project Overview
+LuxeGems Store is designed to provide clients with a premium digital salon where they can browse luxurious handcrafted jewelry, customize stones and sizes, manage a dynamic shopping cart, make secure purchases via Stripe, and track their order status in a personalized dashboard.
+
+---
+
+## Planned Features
+
+### 🚧 Catalog & Filtering (Coming Soon)
+- Dynamic browsing of Collections, Rings, Necklaces, and Earrings.
+- Filter catalog by metal type (Gold, Platinum), price range, and gemstone.
+- Dynamic search bar matching product names and descriptions.
+
+### 🚧 Cart & Checkout (Coming Soon)
+- Full client-side cart states allowing additions, quantity edits, and item removals.
+- Integration of ring sizing selections.
+- Persistent cart storage using local hooks.
+
+### 🚧 Stripe Payment Integration (Coming Soon)
+- Secure checkouts via Stripe Payment Intents API.
+- Live webhook callbacks updating order status in MongoDB.
+- Credit card security configurations.
+
+### 🚧 User Authentication (Coming Soon)
+- Auth integration (credentials or passwordless login).
+- Protected pages for order tracking and user settings.
+- Administrator control panels.
+
+### 🚧 Order Tracking Dashboard (Coming Soon)
+- Display order status updates (Pending, Shipped, Delivered).
+- View purchase histories and item lists.
+
+---
+
+## Planned User Journey Flowchart
+This flowchart traces how a user interacts with the app from landing to final checkout confirmation:
+
+```mermaid
+graph TD
+    Start([1. Landing on Homepage]) --> BrowseCatalog[2. Browse Collections & Products]
+    BrowseCatalog --> ProductDetails[3. View Product Detail & Select Options]
+    ProductDetails --> AddToCart[4. Add Item to Shopping Cart]
+    AddToCart --> ViewCart[5. Review Cart Items]
+    ViewCart --> Checkout[6. Enter Shipping Details & Stripe Pay]
+    Checkout --> ProcessPayment{7. Verify Payment Status}
+    
+    ProcessPayment -- Success --> SuccessPage[8. View Order Confirmation & Invoice]
+    ProcessPayment -- Failure --> RetryPayment[9. Show Error & Prompt Retry]
+    
+    SuccessPage --> Dashboard[10. Track Status in User Profile]
+    RetryPayment --> Checkout
+```
