@@ -1,0 +1,118 @@
+/**
+ * 📁 components/ui/ProductCard.tsx
+ * 📁 ProductCard component for presenting an individual jewelry product.
+ * 🎨 Features high-end aspect ratios, hover effects, category tags, and action buttons.
+ * 🔗 Imports React utilities, Badge/Button components, and price/classname helper tools.
+ */
+
+import React from "react";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { formatPrice } from "@/lib/utils";
+
+/**
+ * 🎯 ProductCard
+ * 
+ * 🎯 Purpose:
+ * Renders a preview card for an individual jewelry item in the shop gallery.
+ * Showcases the image, name, category, formatted price, and contains an unwired
+ * "Add to Cart" button with smooth premium animations.
+ *
+ * 📦 Props:
+ * - `id`: Unique product identifier
+ * - `name`: Display name of the jewelry piece
+ * - `price`: Price of the item in cents (e.g. 245000 for $2,450.00)
+ * - `image`: Public or local image path URL
+ * - `category`: Group classification (e.g., "Rings", "Earrings")
+ * - `isNew`: Optional flag to render a prominent "New" badge on the product image
+ *
+ * 🎨 Usage Example:
+ * ```tsx
+ * <ProductCard
+ *   id="prod-1"
+ *   name="Aurelia Solitaire Ring"
+ *   price={245000}
+ *   image="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600&auto=format&fit=crop"
+ *   category="Rings"
+ *   isNew={true}
+ * />
+ * ```
+ */
+export interface ProductCardProps {
+  /** The unique identifier of the product */
+  id: string;
+  /** The name of the jewelry piece (e.g., "Aurelia Solitaire Ring") */
+  name: string;
+  /** Price of the item in cents (e.g. 245000 for $2,450.00) */
+  price: number;
+  /** The primary image URL showcasing the item */
+  image: string;
+  /** The category grouping for catalog navigation (e.g., "Rings") */
+  category: string;
+  /** Optional flag indicating if the product is a new arrival */
+  isNew?: boolean;
+}
+
+export function ProductCard({
+  id,
+  name,
+  price,
+  image,
+  category,
+  isNew = false,
+}: ProductCardProps) {
+  return (
+    <div id={`product-${id}`} className="group relative flex flex-col overflow-hidden rounded-sm border border-neutral-100 bg-white transition-all duration-300 hover:shadow-lg hover:border-neutral-200">
+      {/* PRODUCT IMAGE CONTAINER */}
+      <div className="relative aspect-square w-full overflow-hidden bg-neutral-50">
+        <img
+          src={image}
+          alt={name}
+          className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+
+        {/* OVERLAY BADGES */}
+        <div className="absolute left-3 top-3 flex flex-col gap-1.5">
+          {isNew && (
+            <Badge variant="gold" className="shadow-sm">
+              New
+            </Badge>
+          )}
+        </div>
+      </div>
+
+      {/* PRODUCT DETAILS */}
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <div className="flex-1">
+          {/* Category Badge/Label */}
+          <div className="mb-2">
+            <Badge variant="secondary" className="text-[10px] tracking-wider uppercase">
+              {category}
+            </Badge>
+          </div>
+
+          {/* Product Name */}
+          <h3 className="font-serif text-base font-semibold text-neutral-900 leading-snug group-hover:text-amber-600 transition-colors duration-300">
+            {name}
+          </h3>
+        </div>
+
+        {/* Pricing & Add to Cart Action */}
+        <div className="mt-4 flex flex-col gap-3">
+          <p className="font-sans text-sm font-semibold text-neutral-900">
+            {formatPrice(price)}
+          </p>
+
+          {/* 🚧 Add to Cart button onClick is not yet wired to cart hook state */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full border-neutral-200 hover:border-amber-600 hover:text-amber-600 hover:bg-amber-50/10"
+          >
+            Add to Cart
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

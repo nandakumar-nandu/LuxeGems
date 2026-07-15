@@ -55,3 +55,17 @@ graph TD
     SuccessPage --> Dashboard[10. Track Status in User Profile]
     RetryPayment --> Checkout
 ```
+
+---
+
+## Shop / Product Gallery
+Browsing the LuxeGems catalog begins on the Shop page (`/shop`), which houses our curated visual collection:
+1. **Interactive Filter Navigation**: The header of the page displays filter buttons for categories: *All*, *Rings*, *Necklaces*, and *Earrings*. Clicking these buttons updates their active styling state dynamically.
+2. **Product Grid Layout**: Below the filter bar, products are laid out in a responsive grid mapping to our premium `ProductCard` atomic component.
+3. **Card Anatomy**:
+   - **Visual Zoom Cover**: High-quality imagery that slightly zooms in when hovered (`group-hover:scale-105`), creating an engaging visual cue.
+   - **Arrival Status Badge**: An elegant gold-themed "New" badge displayed for new products (`isNew` flag).
+   - **Category Tag**: Describing the product type (e.g. Rings, Necklaces) using our atomic Badge.
+   - **Serif Title**: Showing the handcrafted product name.
+   - **Formatted Pricing**: Real-time dollar amount formatting using localized utilities.
+   - **Add to Cart Action**: A custom button that displays outline styles. (Note: Cart state integration is a planned feature).

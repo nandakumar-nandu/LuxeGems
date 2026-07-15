@@ -9,7 +9,9 @@
 
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 /**
  * 🎯 Renders the main responsive navigation header for the website.
@@ -18,13 +20,14 @@ import { Button } from "@/components/ui/Button";
  * @returns The rendered Navbar element
  */
 export default function Navbar() {
+  // ⚙️ Retrieve the current URL pathname for active link styling
+  const pathname = usePathname();
+
   // Navigation links array for clean rendering loop
   const navLinks = [
-    { label: "Collections", href: "#collections" },
-    { label: "Rings", href: "#rings" },
-    { label: "Necklaces", href: "#necklaces" },
-    { label: "Earrings", href: "#earrings" },
-    { label: "About", href: "#about" },
+    { label: "Home", href: "/" },
+    { label: "Shop", href: "/shop" },
+    { label: "About", href: "/#about" },
   ];
 
   return (
@@ -56,15 +59,26 @@ export default function Navbar() {
         {/* PRIMARY NAVIGATION LINKS */}
         {/* 🎨 Horizontal list with clean text size and letter spacing */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="text-xs font-medium uppercase tracking-widest text-neutral-600 transition-colors duration-300 hover:text-amber-600"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = link.href === "/" ? pathname === "/" : pathname === link.href;
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                className={cn(
+                  "relative text-[10px] font-medium uppercase tracking-widest transition-colors duration-300 pb-1 pt-1",
+                  isActive
+                    ? "text-amber-600 font-semibold font-sans"
+                    : "text-neutral-600 hover:text-amber-600 font-sans"
+                )}
+              >
+                {link.label}
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-amber-600 rounded-full" />
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* ACTION ITEMS (Search, Account, Shopping Bag) */}

@@ -55,7 +55,7 @@ export default function Home() {
 
           {/* Call-to-Action Buttons */}
           <div className="flex flex-wrap gap-4 pt-4">
-            <Link href="#collections">
+            <Link href="/shop">
               <Button variant="gold" size="lg">
                 Explore Collections
               </Button>

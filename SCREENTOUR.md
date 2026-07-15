@@ -14,14 +14,28 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
   - **Right Section**: A visual blueprint preview box outlining a blueprint circular sketch of the "Aurelia Solitaire" diamond ring, metal materials, and base pricing details.
   - **Footer**: Brand description, quick collections list, customer support directory, and newsletter signup wrapper.
 
+### Shop Page / Product Gallery
+- **Description**: A visual collection gallery displaying LuxeGems' catalog of fine jewelry. Includes an interactive category filter bar and a highly responsive grid of products.
+- **Layout Outline**:
+  - **Banner Header**: Small tag ("Exclusive Catalog"), a large elegant serif title ("The Gallery"), and a brief introduction welcoming clients.
+  - **Category Filter Bar**: A centered row of styling buttons ("All", "Rings", "Necklaces", "Earrings"). Active filters use a gold theme with charcoal text, while inactive buttons use thin neutral borders.
+  - **Responsive Product Grid**: A 1-to-3 column grid (depending on screen size) containing 6 mock product objects.
+  - **Card Anatomy**:
+    - **Image Container**: A square aspect ratio image that zooms smoothly on hover.
+    - **Badge Overlays**: High-contrast gold badges indicating "New" arrivals.
+    - **Category Label**: Small neutral tag mapping the jewelry type.
+    - **Product Name**: Displayed using a premium serif font that turns golden amber on card hover.
+    - **Price Tag**: Clean, bold pricing formatted using currency helpers.
+    - **Action Button**: A full-width "Add to Cart" button with a light hover outline effect.
+
 ---
 
 ## Planned Screens (🚧 Coming Soon)
 
-### 🚧 Catalog Collections View
-- A product listing page displaying collections in standard responsive grids.
-- Side panels containing filtering options (price, metal, gemstone).
-- Order sort menus (Price Low-to-High, Newest).
+### 🚧 Catalog Collections View (Advanced Features)
+- Side panels containing filtering options (price range, metal type, gemstone).
+- Order sort dropdown menus (Price Low-to-High, Newest).
+- Dynamic paginated loading.
 
 ### 🚧 Product Detail Screen
 - Multi-image zoom gallery displaying high-quality product images.
@@ -49,7 +63,7 @@ This flowchart maps the primary screens and their entry points:
 ```mermaid
 graph TD
     HomeUI["Homepage (/)"]
-    CatalogUI["Catalog Page (/collections)"]
+    CatalogUI["Shop Gallery (/shop)"]
     DetailUI["Product Details (/product/:id)"]
     CartUI["Cart Drawer / Page (/cart)"]
     CheckoutUI["Checkout Screen (/checkout)"]

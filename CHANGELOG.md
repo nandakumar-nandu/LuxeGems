@@ -3,6 +3,13 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.0] - 2026-07-15 10:56
+
+### Added
+- **📁 ProductCard Component**: Created `/components/ui/ProductCard.tsx` to display jewelry items with premium styled card layouts, hover zoom transitions, category badges, and unwired Add to Cart buttons.
+- **📁 Shop Page Gallery**: Created `/app/shop/page.tsx` displaying a responsive grid of 6 hardcoded mock products and an interactive filter navigation bar UI.
+- **🎨 Active Navigation Highlight**: Integrated Next.js `usePathname` in the global `Navbar` component to highlight the currently active path with a premium golden bottom underline indicator.
+
 ## [0.1.0] - 2026-07-13 21:53
 
 ### Added

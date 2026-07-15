@@ -24,6 +24,9 @@ LuxeGems Store is a premium, full-stack jewelry e-commerce web application engin
 **✅ Commit 1 — init: Project Scaffold, Folder Structure, Base Layout, and Documentation**
 This phase establishes the structural blueprint, design styles, and global configuration of the application. No business logic or database connections are active yet.
 
+**✅ Commit 2 — feat: add ProductCard component and static shop page**
+This phase introduces the product visual catalog with a static `/shop` page grid gallery and the reusable atomic `ProductCard` component, as well as navbar active route highlights.
+
 ---
 
 ## Folder Structure Tree
@@ -34,7 +37,9 @@ LuxeGems/
 │   ├── fonts/            # Local asset font binaries
 │   ├── globals.css       # Core Tailwind CSS and base styles
 │   ├── layout.tsx        # Global page wrapper with Navbar and Footer
-│   └── page.tsx          # Homepage containing the premium Hero section
+│   ├── page.tsx          # Homepage containing the premium Hero section
+│   └── shop/             # Shop Pages
+│       └── page.tsx      # Static shop gallery page with mock products
 ├── components/           # Reusable UI component layers
 │   ├── layout/           # Global structural components
 │   │   ├── Footer.tsx    # Global Footer links and newsletter area
@@ -42,7 +47,8 @@ LuxeGems/
 │   └── ui/               # Atomic components
 │       ├── Badge.tsx     # Custom pill tags
 │       ├── Button.tsx    # Customizable buttons with luxury gold styling
-│       └── Card.tsx      # Premium container panels
+│       ├── Card.tsx      # Premium container panels
+│       └── ProductCard.tsx # Premium product card component
 ├── hooks/                # Custom React hooks (empty for now)
 ├── lib/                  # Shareable configurations and helper functions
 │   └── utils.ts          # Utility functions (cn, formatPrice)
@@ -53,7 +59,7 @@ LuxeGems/
 ├── .env.example          # Documentation template for configuration
 ├── .gitignore            # Version control exclusions
 ├── package.json          # Dependency scripts
-└── tsconfig.json         # TypeScript compiler configurations
+├── tsconfig.json         # TypeScript compiler configurations
 ```
 
 ---
@@ -71,6 +77,7 @@ graph TD
 
     App --> Layout["layout.tsx (Navbar & Footer)"]
     App --> Page["page.tsx (Hero Section)"]
+    App --> Shop["shop/page.tsx (Shop Page)"]
     App --> CSS[globals.css]
 
     Comp --> UI[ui/]
@@ -79,12 +86,28 @@ graph TD
     UI --> Button[Button.tsx]
     UI --> Card[Card.tsx]
     UI --> Badge[Badge.tsx]
+    UI --> ProductCard[ProductCard.tsx]
 
     LayoutComp --> Navbar[Navbar.tsx]
     LayoutComp --> Footer[Footer.tsx]
 
     Lib --> Utils[utils.ts]
     Types --> TypeIndex[index.ts]
+```
+
+---
+
+## Component Hierarchy Architecture
+```mermaid
+graph TD
+    subgraph Global Layout
+        Layout[layout.tsx] --> Navbar[Navbar]
+        Layout --> Footer[Footer]
+    end
+
+    subgraph Shop Page
+        Shop[shop/page.tsx] --> ProductCard[ProductCard]
+    end
 ```
 
 ---
@@ -142,7 +165,7 @@ graph TD
 ---
 
 ## What is Coming Next
-In the next session (**Commit 2**), we will implement:
+In the next session (**Commit 3**), we will implement:
 - MongoDB connection config using Mongoose.
 - Product schemas and seed data containing premium catalog items.
 - Dynamic page routing for Catalog Collections and Product Detail pages.
