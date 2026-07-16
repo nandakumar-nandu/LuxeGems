@@ -3,6 +3,15 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.0] - 2026-07-16 15:52
+
+### Added
+- **📁 Order Retrieval Route**: Created GET API endpoint `/app/api/orders/[trackingId]/route.ts` retrieving customer orders dynamically from MongoDB (or local file fallback storage) using dynamic parameter routes.
+- **🎨 Order Tracking Dashboard**: Designed `/app/track-order/page.tsx` client search workspace implementing a visual status stepper (Pending → Processing → Shipped → Delivered), itemized line tables, and recipient descriptions.
+- **🎨 Product Detail View**: Built dynamic page `/app/products/[id]/page.tsx` rendering large item images, categorization tags, localized pricing, stock counts, and cart dispatch bindings.
+- **🎨 Related Recommendations Section**: Integrated "You may also like" related products carousel grids querying pieces belonging to the same category.
+- **🎨 Product Cards Linking**: Updated `ProductCard` component to link titles and image thumbnails directly to the dynamic product detail route.
+
 ## [0.6.0] - 2026-07-16 15:41
 
 ### Added

@@ -6,6 +6,7 @@
  */
 
 import React from "react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/utils";
@@ -68,7 +69,7 @@ export function ProductCard({
   return (
     <div id={`product-${id}`} className="group relative flex flex-col overflow-hidden rounded-sm border border-neutral-100 bg-white transition-all duration-300 hover:shadow-lg hover:border-neutral-200">
       {/* PRODUCT IMAGE CONTAINER */}
-      <div className="relative aspect-square w-full overflow-hidden bg-neutral-50">
+      <Link href={`/products/${id}`} className="block relative aspect-square w-full overflow-hidden bg-neutral-50">
         <img
           src={image}
           alt={name}
@@ -83,7 +84,7 @@ export function ProductCard({
             </Badge>
           )}
         </div>
-      </div>
+      </Link>
 
       {/* PRODUCT DETAILS */}
       <div className="flex flex-1 flex-col p-4 sm:p-5">
@@ -97,7 +98,9 @@ export function ProductCard({
 
           {/* Product Name */}
           <h3 className="font-serif text-base font-semibold text-neutral-900 leading-snug group-hover:text-amber-600 transition-colors duration-300">
-            {name}
+            <Link href={`/products/${id}`}>
+              {name}
+            </Link>
           </h3>
         </div>
 

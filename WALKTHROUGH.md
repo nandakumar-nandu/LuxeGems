@@ -28,9 +28,7 @@ LuxeGems Store is designed to provide clients with a premium digital salon where
 - Protected pages for order tracking and user settings.
 - Administrator control panels.
 
-### 🚧 Order Tracking Dashboard (Coming Soon)
-- Display order status updates (Pending, Shipped, Delivered).
-- View purchase histories and item lists.
+- Persistent order tracking dashboard and stepper.
 
 ---
 
@@ -119,3 +117,23 @@ The checkout process utilizes a secure, multi-step validation form at `/checkout
 2. **Success Presentation**: The page reads the `trackingId` query parameter and displays an elegant confirmation message.
 3. **Logistics Tracking ID**: The unique brand tracking code is presented inside a highlighted copy-paste container block.
 4. **Fulfillment Navigation**: Features a "Track Your Order" action button.
+
+---
+
+## Order Tracking
+1. **Search Workspace**: Customers navigate to `/track-order` and submit their `trackingId` (e.g. `LG-ABCD-1234`) to query their transaction history.
+2. **Dynamic Param APIs**: The page issues a GET request to `/api/orders/[trackingId]` querying database orders.
+3. **Fulfillment Stepper**: Displays progress visually on a step tracker mapping Order statuses:
+   - `Pending` or `Failed` maps to **Order Placed**.
+   - `Paid` maps to **Processing** (Crafting fine pieces).
+   - `Shipped` maps to **Shipped** (Dispatched).
+   - `Delivered` maps to **Delivered** (Arrived).
+4. **Items & Address Summaries**: Renders line item descriptions (image, price, quantity) alongside shipping address destinations.
+
+---
+
+## Product Detail
+1. **Gallery Card Linkages**: Clicking any `ProductCard` image or title redirects the client to its dynamic detail route `/products/[id]`.
+2. **Information Display**: Renders high-end double columns containing product image covers, category badges, serif titles, price metrics, inventory statuses, and detailed descriptions.
+3. **Shopping Context Addition**: Integrates incremental quantity adjusters and "Add to Cart" CTAs dispatching items directly to the global cart.
+4. **Recommendations Section**: Queries related pieces from `/api/products?category=<Category>`, filters out the active item, and presents a 3-column related items gallery.

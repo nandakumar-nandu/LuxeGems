@@ -95,6 +95,29 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
     - **Track Your Order Button**: A solid gold gradient button (fires an alert placeholder).
     - **Return to Storefront Button**: An outline button directing the customer back to the `/shop` gallery.
 
+### Track Order Page (/track-order)
+- **Description**: The query dashboard allowing buyers to trace their purchase fulfillment status.
+- **Layout Outline**:
+  - **Search Bar Input**: A prominent input field that accepts tracking IDs and features a gold "Track" submit button.
+  - **Fulfillment Stepper Timeline**: Visual steps charting the shipping progress (placed, processing, shipped, delivered).
+  - **Details Grid**: Double-column panel displaying the itemized order summary on the left and customer details/shipping addresses on the right.
+
+### Order Status Stepper
+- **Description**: A visual component rendering delivery progress stages based on order status enums.
+- **Progress Steps**:
+  - **Order Placed**: Active when status is `Pending` or `Failed` (confirmed transaction receipt).
+  - **Processing**: Active when status is `Paid` (crafting under progress).
+  - **Shipped**: Active when status is `Shipped` (dispatched in secure boxes).
+  - **Delivered**: Active when status is `Delivered` (delivered to address).
+- **Styling**: Uses numeric step circles colored gold when active/completed and gray when pending, connected by dynamic lines highlighting the path.
+
+### Product Detail Page (/products/[id])
+- **Description**: A double-column dynamic page rendering detailed jewelry specifications and related items.
+- **Layout Outline**:
+  - **Left Section**: Large product image cover featuring absolute badges like "New Edition" when appropriate.
+  - **Right Section**: Category indicators, serif headers, price displays, stock status alerts (e.g. green "In Stock" or amber "Low Stock"), description details, quantity adjusters, and "Add to Cart" CTA buttons.
+  - **Related Recommendations**: "Complete the Look" gallery presenting a 3-column related items grid with product cards.
+
 ---
 
 ## Planned Screens (🚧 Coming Soon)
@@ -103,11 +126,6 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
 - Side panels containing filtering options (price range, metal type, gemstone).
 - Order sort dropdown menus (Price Low-to-High, Newest).
 - Dynamic paginated loading.
-
-### 🚧 Product Detail Screen
-- Multi-image zoom gallery displaying high-quality product images.
-- Choice options for metal selections (18k Gold, Platinum) and ring size selectors.
-- Rich tabs detailing materials, conflict-free verification certificates, and shipping timelines.
 
 ### 🚧 User Profile & Orders View
 - Historic orders listings, shipment trackers, and personal credentials editors.

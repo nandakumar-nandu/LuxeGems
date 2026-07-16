@@ -164,7 +164,7 @@ erDiagram
 ---
 
 ## API Endpoints Reference
-The backend exposes the following API routes for querying the catalog database and managing checkouts:
+The backend exposes the following API routes for querying the catalog database, managing checkouts, and tracking orders:
 
 | Method | Path | Query Parameters / Payload | Description | Response Status |
 | :--- | :--- | :--- | :--- | :--- |
@@ -172,6 +172,7 @@ The backend exposes the following API routes for querying the catalog database a
 | **GET** | `/api/products/[id]` | None | Fetches detailed attributes for a single product. | `200 OK` (details)<br>`404 Not Found`<br>`500 Error` |
 | **POST** | `/api/checkout` | JSON checkout payload (items, customerInfo, shippingAddress, totalAmount) | Creates a pending order and constructs a Stripe Checkout session. | `200 OK` (session URL)<br>`400 Bad Request`<br>`500 Error` |
 | **POST** | `/api/webhook` | Raw Stripe signature headers and body payload | Receives asynchronous event callbacks from Stripe to update order status. | `200 OK` (processed)<br>`400 Invalid Signature`<br>`500 Server Error` |
+| **GET** | `/api/orders/[trackingId]` | None | Retrieves customer order details, status, and shipping logs. | `200 OK` (order data)<br>`404 Not Found`<br>`500 Error` |
 
 ---
 
