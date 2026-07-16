@@ -3,6 +3,18 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.0] - 2026-07-16 16:18
+
+### Added
+- **🎨 Brand About View**: Created `/app/about/page.tsx` describing brand history timelines, artisan sourcing convictions, and creative designer summaries.
+- **🎨 Contact Messaging Portal**: Developed `/app/contact/page.tsx` integrating React Hook Form + Zod validations and EmailJS templates (with automatic simulation mock overrides if credentials are omitted).
+- **🎨 Reusable Toast System**: Created toast messaging layout `/components/ui/Toast.tsx` presenting Emerald-Green success alerts and Crimson-Red error notices.
+- **🎨 Framer Motion Micro-Animations**:
+  - Hero load fading and sliding configurations.
+  - Card hover scale adjustments and shadow lifts in `ProductCard`.
+  - Right-aligned slide timelines in `CartDrawer` using `AnimatePresence`.
+  - Dynamic page route fade transitions using Next.js `template.tsx` structure.
+
 ## [0.7.0] - 2026-07-16 15:52
 
 ### Added

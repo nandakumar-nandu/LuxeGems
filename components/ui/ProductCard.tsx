@@ -55,6 +55,8 @@ export interface ProductCardProps {
   isNew?: boolean;
 }
 
+import { motion } from "framer-motion";
+
 export function ProductCard({
   id,
   name,
@@ -67,7 +69,22 @@ export function ProductCard({
   const { addToCart, setCartOpen } = useCart();
 
   return (
-    <div id={`product-${id}`} className="group relative flex flex-col overflow-hidden rounded-sm border border-neutral-100 bg-white transition-all duration-300 hover:shadow-lg hover:border-neutral-200">
+    <motion.div
+      id={`product-${id}`}
+      /**
+       * 🎨 Hover Animation Settings:
+       * - Scale: 1.015 (very subtle scaling to preserve layout balance).
+       * - Y-offset: Shifts the card 4px upward to simulate a tactile depth/shadow lift.
+       * - Transition: 0.3s duration using easeOut curve is tuned for a smooth, high-end response on mouse over.
+       */
+      whileHover={{
+        scale: 1.015,
+        y: -4,
+        boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
+      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="group relative flex flex-col overflow-hidden rounded-sm border border-neutral-100 bg-white transition-colors duration-300"
+    >
       {/* PRODUCT IMAGE CONTAINER */}
       <Link href={`/products/${id}`} className="block relative aspect-square w-full overflow-hidden bg-neutral-50">
         <img
@@ -124,6 +141,6 @@ export function ProductCard({
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -118,6 +118,21 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
   - **Right Section**: Category indicators, serif headers, price displays, stock status alerts (e.g. green "In Stock" or amber "Low Stock"), description details, quantity adjusters, and "Add to Cart" CTA buttons.
   - **Related Recommendations**: "Complete the Look" gallery presenting a 3-column related items grid with product cards.
 
+### About Page (/about)
+- **Description**: Brand legacy narrative detailing historical origins, core design philosophies, and direct designer profiles.
+- **Layout Outline**:
+  - **Legacy Hero Banner**: Soft-glowing dark banner showing "Our Legacy" tag.
+  - **Craftsmanship Split Grid**: Dynamic columns detailing hand-finished design workflows alongside workshop photos.
+  - **Core Convictions**: 3-column value boards explaining ethical diamond sourcing, artisanal focus, and circular luxury.
+  - **Creative Team Grid**: Circular staff thumbnail avatars presenting names, titles, and backgrounds.
+
+### Contact Page (/contact)
+- **Description**: Client support inquiry submission page with input constraints and email integrations.
+- **Layout Outline**:
+  - **Left Column**: Typography details listing showroom locations, support email, phone numbers, and concierge hours.
+  - **Right Column**: Soft-grey inquiry card rendering name/email fields, message text area, and gold "Submit Inquiry" CTA buttons.
+  - **Floating Toaster alerts**: Floating card banners slide up on submit confirming message success/failure states.
+
 ---
 
 ## Planned Screens (🚧 Coming Soon)

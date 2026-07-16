@@ -11,6 +11,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/context/CartContext";
 import { CartDrawer } from "@/components/ui/CartDrawer";
+import { ToastProvider } from "@/components/ui/Toast";
 import "./globals.css";
 
 // 🎨 Premium Serif Font for luxury typography headings
@@ -55,19 +56,21 @@ export default function RootLayout({
     <html lang="en" className={`${playfair.variable} ${montserrat.variable}`}>
       <body className="font-sans bg-white text-neutral-900 antialiased min-h-screen flex flex-col">
         <CartProvider>
-          {/* GLOBAL HEADER */}
-          <Navbar />
+          <ToastProvider>
+            {/* GLOBAL HEADER */}
+            <Navbar />
 
-          {/* GLOBAL CART DRAWER PANEL */}
-          <CartDrawer />
+            {/* GLOBAL CART DRAWER PANEL */}
+            <CartDrawer />
 
-          {/* PRIMARY VIEWPORT CONTAINER */}
-          <main className="flex-grow">
-            {children}
-          </main>
+            {/* PRIMARY VIEWPORT CONTAINER */}
+            <main className="flex-grow">
+              {children}
+            </main>
 
-          {/* GLOBAL FOOTER */}
-          <Footer />
+            {/* GLOBAL FOOTER */}
+            <Footer />
+          </ToastProvider>
         </CartProvider>
       </body>
     </html>

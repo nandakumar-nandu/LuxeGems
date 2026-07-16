@@ -137,3 +137,12 @@ The checkout process utilizes a secure, multi-step validation form at `/checkout
 2. **Information Display**: Renders high-end double columns containing product image covers, category badges, serif titles, price metrics, inventory statuses, and detailed descriptions.
 3. **Shopping Context Addition**: Integrates incremental quantity adjusters and "Add to Cart" CTAs dispatching items directly to the global cart.
 4. **Recommendations Section**: Queries related pieces from `/api/products?category=<Category>`, filters out the active item, and presents a 3-column related items gallery.
+
+---
+
+## Contact Form
+1. **Inquiry Submissions**: Customers navigate to `/contact` to enter details (Full Name, Email, Inquiry Message).
+2. **Form Validations**: Uses React Hook Form + Zod validation matching minimum lengths and correct email structures before sending.
+3. **EmailJS Integration**: Submitting dispatches the formatted payload directly to the showroom inbox via EmailJS API.
+4. **Simulation Mode**: If API credentials are not set in `.env`, the form pauses for 1.5 seconds, logs details, and displays a success toast fallback.
+5. **Toast Notifications**: Renders success toasts or failure warnings.
