@@ -67,7 +67,7 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
     - Displays static review text cards containing step 1/2 inputs (Full Name, Email, Phone, Address).
     - Lists selected checkout items from the basket context alongside calculated grand totals.
     - **Navigation Triggers**: Displays outline "Back" buttons and primary "Next Step" buttons. Step 3 displays a gold gradient "Place Order" button.
-  - **Order Completed Success Screen**: Replaces the form with a victory visual checkmark, confirmation text, client summary cards, and a random generated ID (e.g. `LXG-123456`).
+  - **Processing Checkout Indicator**: A full-page visual spin loader saying "Preparing secure checkout portal..." which is active while POSTing order details.
 
 ### Product Filtering Use Case
 - **Description**: Explains the client workflow for filtering fine jewelry catalog items by category.
@@ -77,6 +77,23 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
   - **Dynamic Loading Trigger**: The interface displays a revolving gold spinner and initiates a backend request (`/api/products?category=Rings`).
   - **Grid Re-rendering**: The product card grid refreshes to display only items matching the queried category.
   - **Error Fallback**: If connection to the database fails, the grid is replaced by a warning prompt with a "Retry Load" button to reload the active filter.
+
+### Checkout Payment (Stripe Checkout Hosted Gateway)
+- **Description**: The secure external payment portal hosted by Stripe (or simulated redirect locally).
+- **Layout Outline**:
+  - **Left Section**: Displays the LuxeGems store logo, purchased line items list (descriptions, quantities, images), and final subtotal.
+  - **Right Section**: Secure credit card input fields (Card number, Expiration, CVC, Name on card) and Billing Address fields.
+  - **CTA Trigger**: A dark pay button that initiates real-time authorization checks and redirects the user back to the store.
+
+### Order Success Page (/order-success)
+- **Description**: The final presentation page confirming payment success and displaying tracking codes.
+- **Layout Outline**:
+  - **Visual Success Accent**: A green circle outline with a checkmark indicating purchase victory.
+  - **Title Serif**: "Order Confirmed" heading.
+  - **Fulfillment Tracking Panel**: A light grey highlight box displaying a unique tracking code (format: `LG-XXXX-XXXX`) inside a copy-paste dashed border frame.
+  - **Action buttons**:
+    - **Track Your Order Button**: A solid gold gradient button (fires an alert placeholder).
+    - **Return to Storefront Button**: An outline button directing the customer back to the `/shop` gallery.
 
 ---
 

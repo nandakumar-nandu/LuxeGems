@@ -3,6 +3,14 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.0] - 2026-07-16 15:41
+
+### Added
+- **📁 Order Database Model**: Created Mongoose model definition in `/lib/models/Order.ts` to persist client orders, customer profiles, shipping locations, and Stripe session references.
+- **📁 Stripe Checkout Integration**: Implemented checkout route `/app/api/checkout/route.ts` creating Stripe Sessions (or fallback simulations if credentials are absent) and saving pending orders with random `LG-XXXX-XXXX` tracking IDs.
+- **📁 Secure Webhook Receiver**: Created webhook listener `/app/api/webhook/route.ts` executing signature verification security validations and updating MongoDB order states.
+- **🎨 Order Success Page**: Designed presentation page `/app/order-success/page.tsx` rendering success animations and tracking code parameters wrapped in Suspense boundaries.
+
 ## [0.5.0] - 2026-07-16 15:18
 
 ### Added

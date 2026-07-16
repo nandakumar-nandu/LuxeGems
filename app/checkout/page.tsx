@@ -56,8 +56,8 @@ type CheckoutFormData = z.infer<typeof checkoutSchema>;
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const [step, setStep] = useState<number>(1);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [orderId, setOrderId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -104,62 +104,77 @@ export default function CheckoutPage() {
   };
 
   // ⚙️ Handle checkout order placement
-  const onSubmit = (data: CheckoutFormData) => {
-    // ⚙️ Log submitted details for administrative processing reference
-    console.log("Submit order detailed profile metadata:", data);
-    // Generate a premium random order ID
-    const randomId = "LXG-" + Math.floor(100000 + Math.random() * 900000);
-    setOrderId(randomId);
-    setIsSubmitted(true);
-    // Clear the global shopping cart state upon purchase completion
-    clearCart();
+  const onSubmit = async (data: CheckoutFormData) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Post checkout specs to API route
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: items.map((item) => ({
+            productId: item.id,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            quantity: item.quantity,
+          })),
+          customerInfo: {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+          },
+          shippingAddress: {
+            address: data.address,
+            city: data.city,
+            state: data.state,
+            zip: data.zip,
+            country: data.country,
+          },
+          totalAmount: totalPrice,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to create checkout session. Please try again.");
+      }
+
+      const resData = await response.json();
+      
+      // Clear the local shopping cart state upon purchase completion
+      clearCart();
+
+      // Redirect client to secure Stripe checkout or simulated URL
+      window.location.href = resData.checkoutUrl;
+    } catch (err: unknown) {
+      console.error("❌ Checkout submit error:", err);
+      const errMsg = err instanceof Error ? err.message : "Checkout failed. Please try again.";
+      setError(errMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Renders the order completed success screen
-  if (isSubmitted) {
+  // Renders loading overlay
+  if (loading) {
     return (
-      <div className="min-h-[75vh] flex items-center justify-center bg-white py-16">
-        <div className="mx-auto max-w-md px-6 text-center space-y-6">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
-            {/* Elegant success checkmark SVG */}
-            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <div className="space-y-3">
-            <h1 className="font-serif text-3xl font-light text-neutral-900">Thank You</h1>
-            <p className="text-sm text-neutral-500 font-light">
-              Your order has been placed successfully. A digital confirmation receipt and shipment tracking details have been sent to your email.
-            </p>
-          </div>
-          <div className="rounded-sm border border-neutral-100 bg-neutral-50 p-5 space-y-2 text-sm text-neutral-700">
-            <div className="flex justify-between">
-              <span className="text-neutral-400 text-xs uppercase tracking-wider">Order ID</span>
-              <span className="font-mono font-bold text-neutral-900">{orderId}</span>
-            </div>
-            <div className="flex justify-between border-t border-neutral-200/60 pt-2 mt-2">
-              <span className="text-neutral-400 text-xs uppercase tracking-wider">Client</span>
-              <span className="font-medium text-neutral-900">{getValues("name")}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-neutral-400 text-xs uppercase tracking-wider">Email</span>
-              <span className="font-medium text-neutral-900">{getValues("email")}</span>
-            </div>
-          </div>
-          <div className="pt-4">
-            <Link href="/shop">
-              <Button variant="gold" size="md">
-                Continue Shopping
-              </Button>
-            </Link>
-          </div>
+      <div className="min-h-[75vh] flex items-center justify-center bg-white">
+        <div className="text-center space-y-4">
+          <div className="h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs font-light text-neutral-400 font-sans tracking-wide">
+            Preparing secure checkout portal...
+          </p>
         </div>
       </div>
     );
   }
 
   // Renders standard checkout form when cart is empty
-  if (items.length === 0 && !isSubmitted) {
+  if (items.length === 0) {
     return (
       <div className="min-h-[75vh] flex items-center justify-center bg-white">
         <div className="text-center space-y-4">
@@ -359,6 +374,13 @@ export default function CheckoutPage() {
                 </div>
               )}
 
+              {/* Error Warning Display */}
+              {error && (
+                <div className="p-3 text-xs bg-red-50 border border-red-100 text-red-600 rounded-sm font-sans animate-[fadeIn_0.2s_ease-out]">
+                  {error}
+                </div>
+              )}
+
               {/* 🎨 STEP NAVIGATION ACTION TRIGGERS */}
               <div className="flex justify-between border-t border-neutral-100 pt-6 mt-6">
                 {step > 1 ? (
@@ -379,7 +401,6 @@ export default function CheckoutPage() {
                     Next Step
                   </Button>
                 ) : (
-                  /* 🚧 Place Order button click triggers onSubmit to complete checkout (no Stripe payment wiring yet) */
                   <Button type="submit" variant="gold" className="font-semibold">
                     Place Order
                   </Button>

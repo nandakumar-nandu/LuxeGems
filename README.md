@@ -164,12 +164,14 @@ erDiagram
 ---
 
 ## API Endpoints Reference
-The backend exposes the following API routes for querying the catalog database:
+The backend exposes the following API routes for querying the catalog database and managing checkouts:
 
-| Method | Path | Query Parameters | Description | Response Status |
+| Method | Path | Query Parameters / Payload | Description | Response Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **GET** | `/api/products` | `category` (optional filter)<br>`featured` (optional boolean) | Fetches a list of products from MongoDB filtered by criteria. | `200 OK` (list)<br>`500 Error` |
 | **GET** | `/api/products/[id]` | None | Fetches detailed attributes for a single product. | `200 OK` (details)<br>`404 Not Found`<br>`500 Error` |
+| **POST** | `/api/checkout` | JSON checkout payload (items, customerInfo, shippingAddress, totalAmount) | Creates a pending order and constructs a Stripe Checkout session. | `200 OK` (session URL)<br>`400 Bad Request`<br>`500 Error` |
+| **POST** | `/api/webhook` | Raw Stripe signature headers and body payload | Receives asynchronous event callbacks from Stripe to update order status. | `200 OK` (processed)<br>`400 Invalid Signature`<br>`500 Server Error` |
 
 ---
 
@@ -229,6 +231,41 @@ sequenceDiagram
 
 ---
 
+## Secure Payment and Webhook Flow
+This sequence diagram illustrates the lifecycle of a secure credit card charge processing via the Stripe Checkout portal, asynchronous signature verification callbacks, and MongoDB status updates:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Frontend Client
+    participant API as Checkout API (/api/checkout)
+    participant Stripe as Stripe Checkout Hosted Page
+    participant Webhook as Webhook Listener (/api/webhook)
+    participant DB as MongoDB Database Order Table
+
+    Client->>API: POST Checkout request (items, customerInfo, shippingAddress, totalAmount)
+    API->>API: Generate unique trackingId (format: LG-XXXX-XXXX)
+    API->>DB: Save pending order with status: "Pending" and stripeSessionId
+    API->>Stripe: Create checkout session
+    Stripe-->>API: Return Checkout session details & redirect URL
+    API-->>Client: Return session redirect URL
+    Client->>Stripe: Redirect and enter card details
+    Stripe->>Stripe: Process charge
+    Note over Stripe: Payment Captured Successfully
+    Stripe-->>Client: Redirect to /order-success?trackingId=LG-XXXX-XXXX
+    Stripe->>Webhook: Async POST webhook event (checkout.session.completed)
+    Webhook->>Webhook: Verify signature using STRIPE_WEBHOOK_SECRET
+    alt Signature Valid
+        Webhook->>DB: Find order by stripeSessionId and update status to "Paid"
+        DB-->>Webhook: Order updated
+        Webhook-->>Stripe: Respond HTTP 200 OK
+    else Signature Invalid
+        Webhook-->>Stripe: Respond HTTP 400 Bad Request
+    end
+```
+
+---
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -256,8 +293,7 @@ sequenceDiagram
 ---
 
 ## What is Coming Next
-In the next session (**Commit 5**), we will implement:
-- MongoDB connection config using Mongoose.
-- Product schemas and seed data containing premium catalog items.
-- Dynamic page routing for Catalog Collections and Product Detail pages.
-- Client state integration for the shopping cart hooks.
+In the next session (**Commit 7**), we will implement:
+- User Authentication (credentials or passwordless login).
+- Protected pages for order tracking and user settings.
+- Administrator control panels.

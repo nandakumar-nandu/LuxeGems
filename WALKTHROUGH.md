@@ -21,10 +21,7 @@ LuxeGems Store is designed to provide clients with a premium digital salon where
 - Integration of ring sizing selections.
 - Persistent cart storage using local hooks.
 
-### 🚧 Stripe Payment Integration (Coming Soon)
-- Secure checkouts via Stripe Payment Intents API.
-- Live webhook callbacks updating order status in MongoDB.
-- Credit card security configurations.
+- Secure credit card checkouts and webhook processing.
 
 ### 🚧 User Authentication (Coming Soon)
 - Auth integration (credentials or passwordless login).
@@ -100,6 +97,25 @@ The checkout process utilizes a secure, multi-step validation form at `/checkout
    - Pulls in the current cart items list and subtotal summary from the cart context.
    - Summarizes entered contact info and shipping location details for final validation.
 5. **Form Submission & Order Creation**:
-   - Clicking "Place Order" completes validation checks and triggers submission.
-   - Wipes the global in-memory cart using `clearCart()`.
-   - Generates a unique order reference number (e.g. `LXG-123456`) and renders a beautiful success confirmation view.
+   - Clicking "Place Order" runs form validations, formats the order payload, and POSTs details to the `/api/checkout` endpoint.
+   - Clears the global in-memory cart using `clearCart()` and redirects the customer to the returned gateway URL.
+
+---
+
+## Payment Flow
+1. **API Initialization**: When the checkout form on Step 3 is submitted, it POSTs the items and customer credentials payload to `/api/checkout`.
+2. **Stripe Checkout Session**: The backend API initializes a Stripe Checkout Session using the card payment method type, listing item names and prices.
+3. **Database Order Creation**: Saves a new Order record to MongoDB with status `Pending` and maps the `stripeSessionId` key.
+4. **Client Redirect**: Returns `{ checkoutUrl: session.url }` back to the frontend. The client window location is dynamically updated to redirect the buyer to Stripe's payment gateway.
+5. **Simulation Mode**: If Stripe credentials are not present in `.env`, the endpoint runs in Simulation Mode, immediately saving the order status as `Paid` and returning a redirect URL to `/order-success`.
+6. **Webhook Lifecycle Confirmation**:
+   - **checkout.session.completed**: Emitted when payment successfully clears. The `/api/webhook` listener verifies the signature using `STRIPE_WEBHOOK_SECRET` and marks order status as `Paid`.
+   - **checkout.session.expired**: Emitted if checkout times out. Marks order status as `Failed`.
+
+---
+
+## Order Confirmation
+1. **Redirect Success Route**: Following transaction completion, Stripe or simulation redirects the client to `/order-success?trackingId=LG-XXXX-XXXX`.
+2. **Success Presentation**: The page reads the `trackingId` query parameter and displays an elegant confirmation message.
+3. **Logistics Tracking ID**: The unique brand tracking code is presented inside a highlighted copy-paste container block.
+4. **Fulfillment Navigation**: Features a "Track Your Order" action button.
