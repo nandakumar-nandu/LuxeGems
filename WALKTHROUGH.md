@@ -68,4 +68,18 @@ Browsing the LuxeGems catalog begins on the Shop page (`/shop`), which houses ou
    - **Category Tag**: Describing the product type (e.g. Rings, Necklaces) using our atomic Badge.
    - **Serif Title**: Showing the handcrafted product name.
    - **Formatted Pricing**: Real-time dollar amount formatting using localized utilities.
-   - **Add to Cart Action**: A custom button that displays outline styles. (Note: Cart state integration is a planned feature).
+   - **Add to Cart Action**: A custom button that triggers the addToCart context action and auto-opens the cart drawer.
+
+---
+
+## Cart Management
+LuxeGems includes a global client-side cart manager powered by React Context and `useReducer`:
+1. **Adding Items to Cart**: Clicking the "Add to Cart" button on any `ProductCard` triggers a dispatch action that adds the item details (ID, name, price, thumbnail image) to the global cart items array.
+2. **Auto-Open Drawer Feedback**: Upon adding an item, the global state immediately opens the `CartDrawer` sliding over from the right side, giving instant visual confirmation to the client.
+3. **Dynamic Header Cart Badge**: The Navbar features a shopping bag icon with a dynamic badge indicating the total count of items. This count increments instantly upon addition.
+4. **Interactive Controls inside Drawer**:
+   - **Quantity Increments & Decrements**: Consumable `updateQuantity` actions let users adjust counts directly with simple `+` and `-` triggers (clamping the minimum value to 1).
+   - **Removing Items**: An explicit trash icon triggers `removeFromCart`, removing the chosen item entirely.
+   - **Subtotal Tally**: Displays a sum total of the cart contents formatted using price utilities.
+   - **Checkout Gateway Call**: A CTA button directs clients to the checkout phase (unwired for this commit).
+5. **Empty Cart Placeholder**: When empty, the drawer features a friendly visual prompt encouraging the user to continue browsing the shop gallery.

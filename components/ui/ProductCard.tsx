@@ -9,14 +9,15 @@ import React from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/utils";
+import { useCart } from "@/lib/context/CartContext";
 
 /**
  * 🎯 ProductCard
  * 
  * 🎯 Purpose:
  * Renders a preview card for an individual jewelry item in the shop gallery.
- * Showcases the image, name, category, formatted price, and contains an unwired
- * "Add to Cart" button with smooth premium animations.
+ * Showcases the image, name, category, formatted price, and contains an interactive
+ * "Add to Cart" button that updates the global CartContext state.
  *
  * 📦 Props:
  * - `id`: Unique product identifier
@@ -61,6 +62,9 @@ export function ProductCard({
   category,
   isNew = false,
 }: ProductCardProps) {
+  // ⚙️ Pull addToCart and setCartOpen dispatch functions from context
+  const { addToCart, setCartOpen } = useCart();
+
   return (
     <div id={`product-${id}`} className="group relative flex flex-col overflow-hidden rounded-sm border border-neutral-100 bg-white transition-all duration-300 hover:shadow-lg hover:border-neutral-200">
       {/* PRODUCT IMAGE CONTAINER */}
@@ -103,11 +107,15 @@ export function ProductCard({
             {formatPrice(price)}
           </p>
 
-          {/* 🚧 Add to Cart button onClick is not yet wired to cart hook state */}
+          {/* ⚙️ Add to Cart button onClick triggers cart addition and opens the slide drawer */}
           <Button
             variant="outline"
             size="sm"
             className="w-full border-neutral-200 hover:border-amber-600 hover:text-amber-600 hover:bg-amber-50/10"
+            onClick={() => {
+              addToCart({ id, name, price, image });
+              setCartOpen(true);
+            }}
           >
             Add to Cart
           </Button>

@@ -28,6 +28,21 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
     - **Price Tag**: Clean, bold pricing formatted using currency helpers.
     - **Action Button**: A full-width "Add to Cart" button with a light hover outline effect.
 
+### Cart Drawer (Shopping Cart panel)
+- **Description**: A slide-over side panel that slides in from the right when the cart icon is clicked. Allows users to view and edit cart items, quantities, and see computed subtotals.
+- **Layout Outline**:
+  - **Dark Backdrop Screen Overlay**: A dark semi-transparent layer that covers the storefront, focusing attention on the cart drawer (closes the drawer on click).
+  - **Drawer Container**: Fixed vertical sidebar utilizing light shadows, clean padding, and a border structure.
+  - **Drawer Header**: Displays a simple serif title ("Your Cart") and a top-right close (X) icon button.
+  - **Scrollable Item Workspace**: Displays a list of selected jewelry items:
+    - **Image Thumbnail**: A small rectangular product image.
+    - **Title & Subtotal**: Displays the handcrafted product title alongside its calculated line item price.
+    - **Quantity Incrementors**: Responsive `-` and `+` outline buttons allowing clients to modify product quantities in real time.
+    - **Remove Action**: An explicit trash icon allowing users to discard individual items entirely.
+  - **Subtotal Tally Panel**: A fixed footer area that tallies the pricing total of all selected items using currency formatters.
+  - **Checkout Button**: A prominent gold gradient button ("Proceed to Checkout") indicating checkout progression.
+  - **Empty State Workspace**: A visual fallback showing a shopping bag icon, an empty cart reminder, and a "Continue Shopping" button.
+
 ---
 
 ## Planned Screens (🚧 Coming Soon)
@@ -41,10 +56,6 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
 - Multi-image zoom gallery displaying high-quality product images.
 - Choice options for metal selections (18k Gold, Platinum) and ring size selectors.
 - Rich tabs detailing materials, conflict-free verification certificates, and shipping timelines.
-
-### 🚧 Shopping Cart Drawer / Page
-- A slide-over panel displaying chosen items, pricing, and selected configurations.
-- Subtotal tallies and discount code entry boxes.
 
 ### 🚧 Checkout Portal
 - A checkout form collecting shipping addresses, email contact, and payment fields using Stripe Elements.

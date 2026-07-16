@@ -3,6 +3,13 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.0] - 2026-07-16 15:00
+
+### Added
+- **📁 Cart State Context**: Created client-side `/lib/context/CartContext.tsx` with a `useReducer` state management framework handling addToCart, removeFromCart, updateQuantity, and clearCart actions.
+- **📁 Cart Drawer UI Component**: Created `/components/ui/CartDrawer.tsx` rendering a premium slide-over side panel with backdrop overlays, scrollable item listings, quantity increment/decrement controls, subtotals, and checkout hooks.
+- **🎨 Navbar and Card Hookups**: Wired the shop page `ProductCard` additions to context and animated the `Navbar` shopping bag icon and count badge dynamically.
+
 ## [0.2.0] - 2026-07-15 10:56
 
 ### Added

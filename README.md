@@ -138,6 +138,29 @@ graph TD
 
 ---
 
+## Shopping Cart State Transitions
+This state machine illustrates the user actions and mutations that drive the global cart state:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Empty : Cart Initialized
+    
+    Empty --> HasItems : ADD_TO_CART (First Item)
+    
+    HasItems --> HasItems : ADD_TO_CART (Additional Items)
+    HasItems --> HasItems : UPDATE_QUANTITY (Clamped quantity >= 1)
+    HasItems --> HasItems : REMOVE_FROM_CART (Items remaining)
+    
+    HasItems --> Empty : REMOVE_FROM_CART (Last item removed)
+    HasItems --> Empty : CLEAR_CART
+    
+    HasItems --> Checkout : Click Proceed to Checkout
+    Checkout --> Empty : Order Processed Successfully
+    Checkout --> HasItems : Exit Checkout / Modify Items
+```
+
+---
+
 ## Setup Instructions
 
 ### Prerequisites
