@@ -43,6 +43,32 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
   - **Checkout Button**: A prominent gold gradient button ("Proceed to Checkout") indicating checkout progression.
   - **Empty State Workspace**: A visual fallback showing a shopping bag icon, an empty cart reminder, and a "Continue Shopping" button.
 
+### Cart Page (/cart)
+- **Description**: A full-page tabular layout of selected products, providing cart adjustment capabilities and order calculations.
+- **Layout Outline**:
+  - **Tabular Items Workspace**: A border-separated table containing:
+    - **Product Details**: Primary product thumbnail, product name, and an inline "Remove" text link with a trash icon.
+    - **Quantity Box**: Centered count adjusters (`-` and `+` outline triggers) to modify quantities.
+    - **Price Column**: Unit price of the piece formatted via helpers.
+    - **Line Total Column**: Total price calculated for the line item (Unit Price * Quantity).
+  - **Order Summary Sidebar**:
+    - Subtotal calculation, complimentary shipping tag, and calculated order total.
+    - **Proceed to Checkout Button**: A wide gold gradient action button leading to `/checkout`.
+    - **Continue Shopping Button**: An outline button directing back to `/shop`.
+  - **Empty Cart visual fallback**: An elegant shopping bag outline overlaying collection return instructions when items list is empty.
+
+### Checkout Steps (/checkout)
+- **Description**: A clean multi-step checkout form flow verified by react-hook-form inputs and Zod validations. Contains a step indicator tracking current input panels.
+- **Step Layout & Controls**:
+  - **Horizontal Step Tracker**: Renders circle digits ("1 Contact Info", "2 Shipping", "3 Review Order") highlighting the active step with dark outlines and completed steps with green success circles.
+  - **Panel 1: Contact Specs**: Labeled inputs (Full Name, Email Address, Phone Number) using custom FormField templates. Validates format syntax upon stepping forward.
+  - **Panel 2: Shipping Destination**: Street address, city, state, ZIP, and country fields. Validates length requirements to ensure accurate delivery specs.
+  - **Panel 3: Order Review**:
+    - Displays static review text cards containing step 1/2 inputs (Full Name, Email, Phone, Address).
+    - Lists selected checkout items from the basket context alongside calculated grand totals.
+    - **Navigation Triggers**: Displays outline "Back" buttons and primary "Next Step" buttons. Step 3 displays a gold gradient "Place Order" button.
+  - **Order Completed Success Screen**: Replaces the form with a victory visual checkmark, confirmation text, client summary cards, and a random generated ID (e.g. `LXG-123456`).
+
 ---
 
 ## Planned Screens (🚧 Coming Soon)
@@ -56,12 +82,6 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
 - Multi-image zoom gallery displaying high-quality product images.
 - Choice options for metal selections (18k Gold, Platinum) and ring size selectors.
 - Rich tabs detailing materials, conflict-free verification certificates, and shipping timelines.
-
-### 🚧 Checkout Portal
-- A checkout form collecting shipping addresses, email contact, and payment fields using Stripe Elements.
-
-### 🚧 Success Page / Invoice receipt
-- Visual order success checkmarks, order ID, shipping estimates, and summaries.
 
 ### 🚧 User Profile & Orders View
 - Historic orders listings, shipment trackers, and personal credentials editors.

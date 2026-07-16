@@ -38,6 +38,10 @@ LuxeGems/
 │   ├── globals.css       # Core Tailwind CSS and base styles
 │   ├── layout.tsx        # Global page wrapper with Navbar and Footer
 │   ├── page.tsx          # Homepage containing the premium Hero section
+│   ├── cart/             # Cart Pages
+│   │   └── page.tsx      # Full cart page with tabular items summary
+│   ├── checkout/         # Checkout Pages
+│   │   └── page.tsx      # Multi-step checkout form layout
 │   └── shop/             # Shop Pages
 │       └── page.tsx      # Static shop gallery page with mock products
 ├── components/           # Reusable UI component layers
@@ -48,6 +52,7 @@ LuxeGems/
 │       ├── Badge.tsx     # Custom pill tags
 │       ├── Button.tsx    # Customizable buttons with luxury gold styling
 │       ├── Card.tsx      # Premium container panels
+│       ├── FormField.tsx # Reusable labeled input field
 │       └── ProductCard.tsx # Premium product card component
 ├── hooks/                # Custom React hooks (empty for now)
 ├── lib/                  # Shareable configurations and helper functions
@@ -159,6 +164,39 @@ stateDiagram-v2
     Checkout --> HasItems : Exit Checkout / Modify Items
 ```
 
+## Checkout Flow Sequence
+This sequence diagram details the interaction steps of a customer proceeding from their Cart page through form validations to completing order checkout:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Client / User
+    participant Cart as Cart Page (/cart)
+    participant Form as Checkout Form (/checkout)
+    participant State as Cart Context State
+
+    Client->>Cart: View Selected Items
+    Cart->>Client: Display Tabular Items & Subtotal
+    Client->>Cart: Click "Proceed to Checkout"
+    Cart->>Form: Redirect to Checkout Page
+    Note over Form: Step 1: Contact Specifications
+    Client->>Form: Input Name, Email, Phone
+    Form->>Form: Validate Input fields (Zod)
+    Client->>Form: Click "Next Step"
+    Note over Form: Step 2: Shipping Location
+    Client->>Form: Input Address, City, State, ZIP
+    Form->>Form: Validate Location fields (Zod)
+    Client->>Form: Click "Next Step"
+    Note over Form: Step 3: Review Order
+    Form->>State: Fetch Cart Items & Total Amount
+    Form->>Client: Present Client Data & Items Summary
+    Client->>Form: Click "Place Order"
+    Form->>Form: Dispatch Final Submit
+    Form->>State: Dispatch CLEAR_CART Action
+    State-->>Form: Cart Emptied
+    Form->>Client: Render Success Confirmation Panel
+```
+
 ---
 
 ## Setup Instructions
@@ -188,7 +226,7 @@ stateDiagram-v2
 ---
 
 ## What is Coming Next
-In the next session (**Commit 3**), we will implement:
+In the next session (**Commit 5**), we will implement:
 - MongoDB connection config using Mongoose.
 - Product schemas and seed data containing premium catalog items.
 - Dynamic page routing for Catalog Collections and Product Detail pages.

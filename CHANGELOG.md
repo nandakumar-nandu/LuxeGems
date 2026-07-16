@@ -3,6 +3,13 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.0] - 2026-07-16 15:08
+
+### Added
+- **📁 Full-Page Cart Gallery**: Created `/app/cart/page.tsx` rendering a high-end tabular list layout of selected jewelry items, custom increment/decrement quantity parameters, line totals, and order summary sidebars.
+- **📁 Reusable FormField**: Created `/components/ui/FormField.tsx` providing standard labeled text inputs with forwarded refs and reactive red error alerts.
+- **📁 Multi-Step Checkout Flow**: Created `/app/checkout/page.tsx` featuring Contact, Shipping, and Review panels verified by React Hook Form and Zod validation schemas.
+
 ## [0.3.0] - 2026-07-16 15:00
 
 ### Added

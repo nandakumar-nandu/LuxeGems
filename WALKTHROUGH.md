@@ -81,5 +81,24 @@ LuxeGems includes a global client-side cart manager powered by React Context and
    - **Quantity Increments & Decrements**: Consumable `updateQuantity` actions let users adjust counts directly with simple `+` and `-` triggers (clamping the minimum value to 1).
    - **Removing Items**: An explicit trash icon triggers `removeFromCart`, removing the chosen item entirely.
    - **Subtotal Tally**: Displays a sum total of the cart contents formatted using price utilities.
-   - **Checkout Gateway Call**: A CTA button directs clients to the checkout phase (unwired for this commit).
+   - **Checkout Gateway Call**: A CTA button redirects clients to the full Cart page (`/cart`) or directly to the Checkout portal.
 5. **Empty Cart Placeholder**: When empty, the drawer features a friendly visual prompt encouraging the user to continue browsing the shop gallery.
+
+---
+
+## Checkout Process
+The checkout process utilizes a secure, multi-step validation form at `/checkout`:
+1. **Validation Engine**: Backed by **React Hook Form** and **Zod** schema validations, ensuring all input fields match exact formats before letting clients progress to the next step.
+2. **Step 1: Contact Info**:
+   - Collects the user's Full Name, Email Address, and Phone Number.
+   - Requires email validation rules (standard syntax) and phone digits limit validation.
+3. **Step 2: Shipping Address**:
+   - Gathers Street Address, City, State, ZIP/Postal Code, and Country.
+   - Enforces completeness validations to prevent incomplete courier routing.
+4. **Step 3: Review Order**:
+   - Pulls in the current cart items list and subtotal summary from the cart context.
+   - Summarizes entered contact info and shipping location details for final validation.
+5. **Form Submission & Order Creation**:
+   - Clicking "Place Order" completes validation checks and triggers submission.
+   - Wipes the global in-memory cart using `clearCart()`.
+   - Generates a unique order reference number (e.g. `LXG-123456`) and renders a beautiful success confirmation view.
