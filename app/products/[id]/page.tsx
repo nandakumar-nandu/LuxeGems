@@ -8,6 +8,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/context/CartContext";
 import { ProductCard } from "@/components/ui/ProductCard";
@@ -162,10 +163,14 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           {/* Image Block */}
           <div className="lg:col-span-7">
             <div className="relative aspect-square overflow-hidden border border-neutral-100 bg-neutral-50 rounded-sm">
-              <img
+              {/* ⚡ fill prop + sizes lets Next.js serve the right resolution per viewport — avoids oversized downloads */}
+              <Image
                 src={product.image}
                 alt={product.name}
-                className="h-full w-full object-cover object-center animate-[scaleUp_0.4s_ease-out]"
+                fill
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="object-cover object-center"
+                priority // ⚡ LCP image — prioritise fetch so it renders before other assets
               />
               {product.isNew && (
                 <span className="absolute top-4 left-4 bg-amber-600/90 text-white font-semibold text-[10px] uppercase tracking-widest px-3 py-1 shadow-sm backdrop-blur-sm rounded-sm">

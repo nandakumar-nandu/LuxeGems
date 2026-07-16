@@ -146,3 +146,27 @@ The checkout process utilizes a secure, multi-step validation form at `/checkout
 3. **EmailJS Integration**: Submitting dispatches the formatted payload directly to the showroom inbox via EmailJS API.
 4. **Simulation Mode**: If API credentials are not set in `.env`, the form pauses for 1.5 seconds, logs details, and displays a success toast fallback.
 5. **Toast Notifications**: Renders success toasts or failure warnings.
+
+---
+
+## SEO and Performance
+
+### Image Optimization
+1. **Next.js `<Image>` Component**: All `<img>` tags replaced across every page and component. The `fill` prop is used for aspect-ratio containers (ProductCard, About page hero, team portraits); explicit `width`/`height` is used for fixed-size thumbnails (CartDrawer, cart table, checkout summary).
+2. **`sizes` Prop**: Each `<Image>` has a `sizes` attribute tuned to its layout context — e.g., `(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw` for product cards — so Next.js generates and serves the right resolution for each device.
+3. **`priority` on LCP Image**: The main product image on `/products/[id]` is marked `priority` so the browser fetches it ahead of other assets, improving Largest Contentful Paint.
+4. **Remote Patterns**: `next.config.mjs` is configured with Unsplash as an allowed domain so that Next.js can convert JPEGs to WebP/AVIF on-the-fly.
+
+### SEO Metadata Layouts
+1. **Per-Route Layout Files**: Every route segment has its own `layout.tsx` exporting a `metadata` object — giving each page a unique `<title>`, `<meta name="description">`, Open Graph properties, and Twitter Card tags.
+2. **Dynamic Product Metadata**: `/app/products/[id]/layout.tsx` uses `generateMetadata()` to fetch the actual product name, description, and image at build time — giving each product its own unique Google-indexed page.
+3. **`robots: noindex`**: Cart, Checkout, and Order Success pages are marked `noindex, nofollow` to prevent transactional and session-specific URLs from polluting search index results and consuming crawl budget.
+
+### Loading Skeletons
+1. **ProductCardSkeleton**: Mirrors the exact visual shape of `ProductCard` — prevents layout shift while product data resolves.
+2. **OrderStatusSkeleton**: Mirrors the order tracking dashboard layout — steppers, line items, and address columns.
+3. **`loading.tsx` Integration**: Next.js App Router automatically shows `loading.tsx` during page-level Suspense boundaries, giving instant perceived load feedback.
+
+### Error Boundaries and 404
+1. **`/app/error.tsx`**: Global client error boundary — shows "Concierge Interrupted" screen with Retry and Return Home actions; logs errors to the console.
+2. **`/app/not-found.tsx`**: Custom 404 — "Masterpiece Not Found" brand-consistent empty state with a catalog redirect CTA.

@@ -8,6 +8,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
+import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 
@@ -260,10 +261,13 @@ function TrackOrderContent() {
                 {order.items.map((item, idx) => (
                   <div key={idx} className={`flex gap-4 items-center ${idx > 0 ? "pt-4" : ""}`}>
                     <div className="relative h-12 w-12 flex-shrink-0 bg-neutral-50 border border-neutral-100 rounded-sm overflow-hidden">
-                      <img
+                      {/* ⚡ fill + object-cover renders correctly inside the fixed 48×48 parent */}
+                      <Image
                         src={item.image}
                         alt={item.name}
-                        className="object-cover w-full h-full"
+                        fill
+                        sizes="48px"
+                        className="object-cover"
                       />
                     </div>
                     <div className="flex-1 min-w-0">

@@ -7,6 +7,7 @@
 
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -421,7 +422,8 @@ export default function CheckoutPage() {
               {items.map((item, index) => (
                 <div key={item.id} className={cn("flex items-center gap-3 pt-3", index === 0 && "pt-0")}>
                   <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-sm border border-neutral-100 bg-neutral-200/20">
-                    <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                    {/* ⚡ Fixed 56×56 dimensions prevent CLS; object-cover fills the container cleanly */}
+                    <Image src={item.image} alt={item.name} width={56} height={56} className="h-full w-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-serif text-xs font-semibold text-neutral-800 truncate pr-2">

@@ -3,6 +3,19 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.0] - 2026-07-16 16:40
+
+### Added
+- **⚡ Next.js Image Optimization**: Replaced all bare `<img>` tags across 7 files with the `<Image>` component — uses `fill`, `sizes`, and `priority` props where appropriate to eliminate CLS and reduce bandwidth.
+- **⚡ Image Remote Patterns**: Configured `next.config.mjs` to allow Unsplash image optimization via `remotePatterns`.
+- **🎯 SEO Metadata Layouts**: Added per-route `layout.tsx` files for `shop`, `products/[id]` (dynamic `generateMetadata`), `cart`, `checkout`, `order-success`, `track-order`, `about`, and `contact` — each with `title`, `description`, `openGraph`, and `twitter:card` metadata.
+- **🎨 ProductCardSkeleton**: Pulsating placeholder card that mirrors the `ProductCard` layout shape — used during async data fetching.
+- **🎨 OrderStatusSkeleton**: Pulsating placeholder layout mirroring the full order tracking dashboard — prevents layout shift during queries.
+- **🎨 Shop Loading Screen**: `/app/shop/loading.tsx` renders 6 `ProductCardSkeleton` cards and filter bar placeholders while catalog data loads.
+- **🎨 Track Order Loading Screen**: `/app/track-order/loading.tsx` renders lookup form and `OrderStatusSkeleton` while order data resolves.
+- **🛡️ Global Error Boundary**: `/app/error.tsx` renders an upscale error recovery screen with Retry and Return Home actions.
+- **🛡️ Custom 404 Page**: `/app/not-found.tsx` renders a brand-consistent "Masterpiece Not Found" empty-state with a catalog redirect.
+
 ## [0.8.0] - 2026-07-16 16:18
 
 ### Added

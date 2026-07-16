@@ -8,6 +8,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 /**
@@ -134,9 +135,12 @@ export default function AboutPage() {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="aspect-[4/3] rounded-sm bg-neutral-100 overflow-hidden border border-neutral-150"
           >
-            <img
+            {/* ⚡ fill + sizes serves responsive resolutions; this image is purely decorative/editorial */}
+            <Image
               src="https://images.unsplash.com/photo-1531973576160-7125cd663d86?q=80&w=800&auto=format&fit=crop"
               alt="Artisan studio work"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover w-full h-full"
             />
           </motion.div>
@@ -196,10 +200,13 @@ export default function AboutPage() {
                 className="flex flex-col items-center text-center space-y-4"
               >
                 <div className="relative h-48 w-48 rounded-full overflow-hidden border border-neutral-200 bg-neutral-50 shadow-sm">
-                  <img
+                  {/* ⚡ fill inside a fixed 192×192 parent; grayscale filter for editorial team look */}
+                  <Image
                     src={member.image}
                     alt={member.name}
-                    className="object-cover w-full h-full filter grayscale hover:grayscale-0 transition-all duration-500"
+                    fill
+                    sizes="192px"
+                    className="object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   />
                 </div>
                 <div className="space-y-1">

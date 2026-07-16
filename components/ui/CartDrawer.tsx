@@ -9,6 +9,7 @@
 
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/lib/context/CartContext";
 import { Button } from "@/components/ui/Button";
@@ -155,9 +156,11 @@ export function CartDrawer() {
                     >
                       {/* Product Thumbnail image */}
                       <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm border border-neutral-100 bg-neutral-50">
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
+                          width={80} // ⚡ Define explicit width mapping to parent bounds (80px / h-20) to skip layout recalculation.
+                          height={80} // ⚡ Define explicit height to protect visual alignment structures from layout shift.
                           className="h-full w-full object-cover object-center"
                         />
                       </div>

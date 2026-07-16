@@ -7,6 +7,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/utils";
@@ -87,9 +88,11 @@ export function ProductCard({
     >
       {/* PRODUCT IMAGE CONTAINER */}
       <Link href={`/products/${id}`} className="block relative aspect-square w-full overflow-hidden bg-neutral-50">
-        <img
+        <Image
           src={image}
           alt={name}
+          fill // ⚡ Use layout fill to occupy dynamic grid square aspect ratios fluidly.
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" // ⚡ Serve downscaled image formats relative to client screen sizes.
           className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
         />
 

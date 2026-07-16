@@ -8,6 +8,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/context/CartContext";
 import { Button } from "@/components/ui/Button";
@@ -93,9 +94,12 @@ export default function CartPage() {
                       {/* Product Thumbnail & Title details */}
                       <td className="py-6 pr-4 flex items-center gap-4">
                         <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm border border-neutral-100 bg-neutral-50">
-                          <img
+                          {/* ⚡ Fixed 80×80px dimensions eliminate CLS in table cell context */}
+                          <Image
                             src={item.image}
                             alt={item.name}
+                            width={80}
+                            height={80}
                             className="h-full w-full object-cover object-center"
                           />
                         </div>

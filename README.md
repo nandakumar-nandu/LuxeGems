@@ -294,7 +294,48 @@ sequenceDiagram
 ---
 
 ## What is Coming Next
-In the next session (**Commit 7**), we will implement:
+In the next session (**Commit 10**), we will implement:
 - User Authentication (credentials or passwordless login).
 - Protected pages for order tracking and user settings.
 - Administrator control panels.
+
+---
+
+## Lighthouse Score Targets
+
+These are the target Lighthouse scores for each key public page. They were established with the optimizations shipped in Commit 9 (Next.js `<Image>`, skeleton loading states, SEO metadata layouts, and error boundaries).
+
+| Page | Performance | Accessibility | Best Practices | SEO |
+|------|-------------|---------------|----------------|-----|
+| `/` (Homepage) | ≥ 90 | ≥ 95 | ≥ 95 | 100 |
+| `/shop` | ≥ 85 | ≥ 95 | ≥ 90 | 100 |
+| `/products/[id]` | ≥ 85 | ≥ 95 | ≥ 90 | 100 |
+| `/about` | ≥ 90 | ≥ 95 | ≥ 95 | 100 |
+| `/contact` | ≥ 90 | ≥ 95 | ≥ 95 | 100 |
+| `/track-order` | ≥ 85 | ≥ 90 | ≥ 90 | 100 |
+
+### Key Optimizations Applied (Commit 9)
+
+| Optimization | Lighthouse Impact |
+|---|---|
+| `<Image>` with `fill` + `sizes` | Reduces LCP and eliminates bandwidth waste from oversized images |
+| `<Image priority>` on LCP element | Removes render-blocking delay on the hero product photo |
+| `remotePatterns` in `next.config.mjs` | Enables WebP/AVIF conversion for all Unsplash images |
+| Skeleton loading states | Eliminates Cumulative Layout Shift (CLS) during async fetches |
+| Per-route metadata layouts | Enables accurate title/description tags → improves click-through from search |
+| `robots: noindex` on cart/checkout | Prevents transactional pages from consuming crawl budget |
+| `generateMetadata` on product pages | Gives each product a unique, indexed title + description for Google Shopping |
+
+### How to Run Lighthouse Locally
+
+```bash
+# 1. Build and serve the production bundle
+npm run build
+npx serve .next -l 3000
+
+# 2. In Chrome DevTools → Lighthouse tab → Run analysis
+# OR use the CLI:
+npx lighthouse http://localhost:3000 --view
+```
+
+> **Note**: Always run Lighthouse against the production build (`npm run build`), not the dev server. Dev server scores will be significantly lower due to unminified assets and HMR overhead.
