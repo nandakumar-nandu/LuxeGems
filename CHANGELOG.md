@@ -3,6 +3,15 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.0] - 2026-07-16 15:18
+
+### Added
+- **📁 MongoDB Mongoose Adapter**: Implemented client-cached database connection pools in `/lib/db/mongoose.ts` ensuring optimized connection counts.
+- **📁 Product Database Model**: Created Mongoose model definition in `/lib/models/Product.ts` mapping properties (`name`, `price`, `category`, `image`, `description`, `stock`, `isNew`, `isFeatured`).
+- **📁 Products API Routes**: Established GET list endpoint `/app/api/products/route.ts` (with optional filters) and detail endpoint `/app/api/products/[id]/route.ts`.
+- **📁 Catalog Seed Generator**: Created seeding script `/lib/db/seed.ts` inserting 8 fine jewelry items.
+- **🎨 Dynamic Shop Fetching**: Updated `/app/shop/page.tsx` to fetch catalog items dynamically from backend API routes with Next.js revalidation.
+
 ## [0.4.0] - 2026-07-16 15:08
 
 ### Added

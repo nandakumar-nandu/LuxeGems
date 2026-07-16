@@ -141,6 +141,36 @@ graph TD
     Home --> Admin
 ```
 
+## Product Schema Database ER Diagram
+This diagram represents the structural database properties modeled for each catalog product:
+
+```mermaid
+erDiagram
+    PRODUCT {
+        ObjectId _id PK "Unique Mongoose Identifier"
+        String name "Jewelry Display Name"
+        Number price "Price in cents (e.g. 245000)"
+        String category "Category catalog name (Rings, Necklaces, etc.)"
+        String image "Visual Unsplash Image asset URL"
+        String description "Craftsmanship design notes specifications"
+        Number stock "Quantity inventory level count"
+        Boolean isNew "New arrival badge display status"
+        Boolean isFeatured "Signature featured product highlight flag"
+        Date createdAt "Database entry creation timestamp"
+        Date updatedAt "Database entry modification timestamp"
+    }
+```
+
+---
+
+## API Endpoints Reference
+The backend exposes the following API routes for querying the catalog database:
+
+| Method | Path | Query Parameters | Description | Response Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **GET** | `/api/products` | `category` (optional filter)<br>`featured` (optional boolean) | Fetches a list of products from MongoDB filtered by criteria. | `200 OK` (list)<br>`500 Error` |
+| **GET** | `/api/products/[id]` | None | Fetches detailed attributes for a single product. | `200 OK` (details)<br>`404 Not Found`<br>`500 Error` |
+
 ---
 
 ## Shopping Cart State Transitions

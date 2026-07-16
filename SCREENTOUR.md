@@ -69,6 +69,15 @@ This document details the interface layouts of LuxeGems Store, current mockups, 
     - **Navigation Triggers**: Displays outline "Back" buttons and primary "Next Step" buttons. Step 3 displays a gold gradient "Place Order" button.
   - **Order Completed Success Screen**: Replaces the form with a victory visual checkmark, confirmation text, client summary cards, and a random generated ID (e.g. `LXG-123456`).
 
+### Product Filtering Use Case
+- **Description**: Explains the client workflow for filtering fine jewelry catalog items by category.
+- **Workflow & Layout Outline**:
+  - **Category Selectors**: The user clicks a category selector in the filter bar (e.g. "Rings").
+  - **State Highlights**: The selected selector immediately transitions to a filled gold highlight background while others revert to outline borders.
+  - **Dynamic Loading Trigger**: The interface displays a revolving gold spinner and initiates a backend request (`/api/products?category=Rings`).
+  - **Grid Re-rendering**: The product card grid refreshes to display only items matching the queried category.
+  - **Error Fallback**: If connection to the database fails, the grid is replaced by a warning prompt with a "Retry Load" button to reload the active filter.
+
 ---
 
 ## Planned Screens (🚧 Coming Soon)

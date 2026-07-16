@@ -2,81 +2,83 @@
  * 📁 app/shop/page.tsx
  * 📁 Shop Page component for LuxeGems Store.
  * 🎨 Renders a premium Product Gallery layout with responsive grid layout and filter navigation UI.
- * 🔗 Imports React hooks, UI Button, ProductCard atomic component, and mock data types.
+ * 🔗 Imports React hooks, UI Button, ProductCard atomic component, and helper fetch functions.
  */
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { ProductCard } from "@/components/ui/ProductCard";
+
+interface DBProduct {
+  _id: string;
+  name: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+  stock: number;
+  isNew: boolean;
+  isFeatured: boolean;
+}
 
 /**
  * 🎯 ShopPage
  * 
  * 🎯 Purpose:
  * Renders the primary storefront shop gallery. Features an interactive filter navigation bar
- * and displays a premium responsive grid of fine jewelry items.
+ * and displays a premium responsive grid of fine jewelry items fetched dynamically from the database.
  *
  * @returns The rendered Shop page markup
  */
 export default function ShopPage() {
-  // ⚙️ Filter state - toggles styling, filtering logic itself is not wired yet
+  // ⚙️ Filter state - triggers a database query whenever it changes
   const [activeFilter, setActiveFilter] = useState<string>("All");
-
-  // Hardcoded premium mock product data
-  const mockProducts = [
-    {
-      id: "prod-1",
-      name: "Aurelia Solitaire Diamond Ring",
-      price: 245000,
-      image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600&auto=format&fit=crop",
-      category: "Rings",
-      isNew: true,
-    },
-    {
-      id: "prod-2",
-      name: "Seraphina Pearl Droplet Necklace",
-      price: 480000,
-      image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600&auto=format&fit=crop",
-      category: "Necklaces",
-      isNew: true,
-    },
-    {
-      id: "prod-3",
-      name: "Celeste Diamond Stud Earrings",
-      price: 185000,
-      image: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?q=80&w=600&auto=format&fit=crop",
-      category: "Earrings",
-      isNew: false,
-    },
-    {
-      id: "prod-4",
-      name: "Elysian Emerald Band",
-      price: 320000,
-      image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=600&auto=format&fit=crop",
-      category: "Rings",
-      isNew: false,
-    },
-    {
-      id: "prod-5",
-      name: "Helena Gold Pendant Necklace",
-      price: 125000,
-      image: "https://images.unsplash.com/photo-1611085583191-a3b1a3055641?q=80&w=600&auto=format&fit=crop",
-      category: "Necklaces",
-      isNew: false,
-    },
-    {
-      id: "prod-6",
-      name: "Athena Diamond Drop Earrings",
-      price: 210000,
-      image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop",
-      category: "Earrings",
-      isNew: true,
-    },
-  ];
+  // ⚙️ Product storage state
+  const [products, setProducts] = useState<DBProduct[]>([]);
+  // ⚙️ UI loading status flag
+  const [loading, setLoading] = useState<boolean>(true);
+  // ⚙️ Exception error status storage
+  const [error, setError] = useState<string | null>(null);
 
   const filterCategories = ["All", "Rings", "Necklaces", "Earrings"];
+
+  // ⚙️ Fetch catalog items from API on component mount or category filter changes
+  useEffect(() => {
+    const fetchCatalog = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Build target URL; append category query parameter if filtering is active
+        const url =
+          activeFilter === "All"
+            ? "/api/products"
+            : `/api/products?category=${activeFilter}`;
+
+        // 🔗 Execute API request using Next.js fetch API
+        const response = await fetch(url, {
+          next: { revalidate: 60 }, // Revalidate caching rules (every 60 seconds)
+        });
+
+        if (!response.ok) {
+          throw new Error("Unable to retrieve catalog collections");
+        }
+
+        const data = await response.json();
+        setProducts(data);
+      } catch (err: unknown) {
+        console.error("❌ Fetch products error:", err);
+        const errMsg = err instanceof Error ? err.message : "Failed to load catalog. Please try again.";
+        setError(errMsg);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCatalog();
+  }, [activeFilter]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -118,21 +120,49 @@ export default function ShopPage() {
           })}
         </div>
 
-        {/* 🎨 RESPONSIVE GALLERY GRID */}
-        {/* Renders products inside a clean responsive structure */}
-        <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-          {mockProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              name={product.name}
-              price={product.price}
-              image={product.image}
-              category={product.category}
-              isNew={product.isNew}
-            />
-          ))}
-        </div>
+        {/* LOADING & ERROR TEMPLATE PLACEMENT */}
+        {loading ? (
+          <div className="py-20 text-center space-y-4">
+            <div className="h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-xs font-light text-neutral-400 font-sans tracking-wide">
+              Loading Collections...
+            </p>
+          </div>
+        ) : error ? (
+          <div className="py-20 text-center space-y-4">
+            <div className="rounded-full bg-red-50 p-4 text-red-500 inline-block">
+              <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <p className="text-sm font-sans font-medium text-neutral-800">{error}</p>
+            <Button variant="outline" size="sm" onClick={() => setActiveFilter(activeFilter)}>
+              Retry Load
+            </Button>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="py-20 text-center">
+            <p className="text-sm font-light text-neutral-400 font-sans">
+              No products found in this category.
+            </p>
+          </div>
+        ) : (
+          /* 🎨 RESPONSIVE GALLERY GRID */
+          /* Renders products retrieved dynamically from the MongoDB catalog API */
+          <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                name={product.name}
+                price={product.price}
+                image={product.image}
+                category={product.category}
+                isNew={product.isNew}
+              />
+            ))}
+          </div>
+        )}
 
       </div>
     </div>
