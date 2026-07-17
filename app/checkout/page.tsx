@@ -202,8 +202,8 @@ export default function CheckoutPage() {
         
         {/* 🎨 STEP INDICATOR HEADER */}
         {/* Horizontal layout tracking current form position */}
-        <div className="mx-auto max-w-3xl mb-12">
-          <div className="flex items-center justify-between relative">
+        <div className="mx-auto max-w-3xl mb-8 sm:mb-12">
+          <div className="flex items-center justify-between relative px-2 sm:px-0">
             {/* Background line connecting indicator dots */}
             <div className="absolute left-0 top-1/2 h-[1px] w-full bg-neutral-200 -z-10" />
 
@@ -211,26 +211,27 @@ export default function CheckoutPage() {
               const isCompleted = step > s.num;
               const isActive = step === s.num;
               return (
-                <div key={s.num} className="flex flex-col items-center space-y-2 bg-white px-4">
+                <div key={s.num} className="flex flex-col items-center space-y-1.5 sm:space-y-2 bg-white px-2 sm:px-4">
                   <div
                     className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold font-sans border transition-all duration-300",
+                      "flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full text-xs font-semibold font-sans border transition-all duration-300",
                       isCompleted && "bg-emerald-600 border-emerald-600 text-white",
                       isActive && "bg-neutral-900 border-neutral-900 text-white ring-4 ring-neutral-100",
                       !isActive && !isCompleted && "bg-neutral-50 border-neutral-200 text-neutral-400"
                     )}
                   >
                     {isCompleted ? (
-                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
                       s.num
                     )}
                   </div>
+                  {/* Label text — hidden on tiny screens to prevent overflow */}
                   <span
                     className={cn(
-                      "text-[10px] uppercase tracking-wider font-semibold font-sans",
+                      "hidden xs:block text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold font-sans whitespace-nowrap",
                       isActive ? "text-neutral-900" : "text-neutral-400"
                     )}
                   >
@@ -240,6 +241,10 @@ export default function CheckoutPage() {
               );
             })}
           </div>
+          {/* Mobile active step label — shown only on xs where text labels are hidden */}
+          <p className="text-center text-xs font-semibold uppercase tracking-widest text-neutral-500 mt-3 xs:hidden font-sans">
+            Step {step} — {stepsList[step - 1]?.name}
+          </p>
         </div>
 
         {/* PRIMARY FORM WORKSPACE */}

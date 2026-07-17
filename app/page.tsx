@@ -68,7 +68,7 @@ export default function Home() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="lg:col-span-7 space-y-8 text-left"
+          className="lg:col-span-7 space-y-8 text-center lg:text-left flex flex-col items-center lg:items-start"
         >
           {/* Subtle tag/label above the main heading */}
           <motion.div variants={itemVariants} className="inline-flex items-center gap-2">
@@ -90,13 +90,13 @@ export default function Home() {
           {/* Descriptive body text */}
           <motion.p
             variants={itemVariants}
-            className="text-sm font-light leading-relaxed text-neutral-400 max-w-xl font-sans"
+            className="text-sm font-light leading-relaxed text-neutral-400 max-w-xl mx-auto lg:mx-0 font-sans"
           >
             Indulge in our signature collections of conflict-free diamonds and sustainably sourced precious metals. Each piece is custom designed and carefully sculpted by master jewelers to carry your stories through generations.
           </motion.p>
 
           {/* Call-to-Action Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-4">
+          <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
             <Link href="/shop">
               <Button variant="gold" size="lg">
                 Explore Collections

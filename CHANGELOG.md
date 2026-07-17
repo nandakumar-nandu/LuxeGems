@@ -3,6 +3,21 @@
 All notable changes to the LuxeGems Store project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.0] - 2026-07-16 17:15 — Initial Production Release 🚀
+
+### Summary
+LuxeGems Store v1.0.0 is the complete, production-ready release of a full-stack fine jewelry e-commerce platform. This version includes all planned features, full mobile responsiveness, complete documentation, and deployment configuration.
+
+### Added
+- **📱 Mobile Navbar**: Hamburger menu with dropdown — replaces horizontal nav on screens below `md`. Includes active link detection fix using `pathname.startsWith()` and conditional cart badge (hidden when empty, shows "9+" when count > 9).
+- **📱 Cart Page Mobile Layout**: Responsive card layout for mobile (shown on `< lg`); original 4-column table preserved on desktop (`hidden lg:block`). Both layouts share the same CartContext data and handlers.
+- **📱 Checkout Step Indicator Fix**: Step labels use `hidden xs:block` to prevent overflow on small screens; a fallback `<p>` tag shows the current step name when labels are hidden.
+- **🛡️ ErrorBoundary Component**: Reusable class-based `components/ui/ErrorBoundary.tsx` wrapping the root layout `<main>`. Implements `getDerivedStateFromError` + `componentDidCatch`. Supports custom `fallback` prop; shows raw error in dev mode.
+- **⚙️ .env.example**: Complete rewrite with all 8 environment variables (MongoDB, Stripe ×3, EmailJS ×3, App URL) — each with multi-line comments explaining the value and exactly where to get it.
+- **📖 README.md**: Full rewrite with live demo placeholder, step-by-step setup guide (clone → install → env → seed → run), complete folder structure tree, routes table, 6 Mermaid diagrams (architecture, routes flowchart, component hierarchy, payment sequence, database ER, user journey), Lighthouse targets, and Vercel deployment guide.
+- **📖 WALKTHROUGH.md**: Replaced all `🚧` planned-feature placeholders with completed feature summaries. Added "Mobile Responsiveness" section (Navbar, cart, checkout) and "ErrorBoundary Component" technical deep-dive.
+- **📖 SCREENTOUR.md**: Full rewrite covering all 15 screens with: what the user sees, available actions table, what happens after each action, and edge cases. Added mobile responsiveness summary table. Removed all `🚧` placeholders.
+
 ## [0.9.0] - 2026-07-16 16:40
 
 ### Added

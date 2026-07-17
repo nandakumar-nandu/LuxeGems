@@ -1,12 +1,14 @@
 <!--
   📁 README.md
-  📁 Main documentation for LuxeGems Store.
-  ⚙️ Outlines setup steps, folder paths, routing flow, and project architecture.
+  📁 Main documentation for LuxeGems Store — Version 1.0.0
+  ⚙️ Full setup guide, architecture diagrams, routes, and project overview.
 -->
 
 # LuxeGems Store
 
-LuxeGems Store is a premium, full-stack jewelry e-commerce web application engineered with modern web standards to deliver an immersive, elegant, and secure shopping experience for high-end fine jewelry.
+**LuxeGems Store** is a production-ready, full-stack jewelry e-commerce platform built with Next.js 14 App Router, MongoDB, Stripe payments, and Framer Motion animations. It delivers an immersive, premium shopping experience from product browsing through order tracking.
+
+> 🚀 **Live Demo**: [https://luxegems.vercel.app](https://luxegems.vercel.app) *(placeholder — update after deploying)*
 
 ---
 
@@ -14,296 +16,358 @@ LuxeGems Store is a premium, full-stack jewelry e-commerce web application engin
 ![Next.js 14](https://img.shields.io/badge/Next.js-14.2.35-black?style=for-the-badge&logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.1-38bdf8?style=for-the-badge&logo=tailwindcss)
-![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=nodedotjs)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Latest-47a248?style=for-the-badge&logo=mongodb)
 ![Stripe](https://img.shields.io/badge/Stripe-Integration-635bff?style=for-the-badge&logo=stripe)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.x-ff0055?style=for-the-badge&logo=framer)
 
 ---
 
-### Current Status
-**✅ Commit 1 — init: Project Scaffold, Folder Structure, Base Layout, and Documentation**
-This phase establishes the structural blueprint, design styles, and global configuration of the application. No business logic or database connections are active yet.
+## Feature Summary
 
-**✅ Commit 2 — feat: add ProductCard component and static shop page**
-This phase introduces the product visual catalog with a static `/shop` page grid gallery and the reusable atomic `ProductCard` component, as well as navbar active route highlights.
+| Feature | Status |
+|---|---|
+| Animated Hero Section | ✅ |
+| Product Catalog (API-driven) | ✅ |
+| Category Filter | ✅ |
+| Product Detail Page | ✅ |
+| Cart Context (useReducer) | ✅ |
+| Cart Drawer (slide-in) | ✅ |
+| Full Cart Page (responsive) | ✅ |
+| Multi-step Checkout (Zod + RHF) | ✅ |
+| Stripe Payment Integration | ✅ |
+| Stripe Webhook Handler | ✅ |
+| MongoDB + Mongoose Models | ✅ |
+| DB Seed Script (8 products) | ✅ |
+| Order Tracking Page | ✅ |
+| Visual Order Status Stepper | ✅ |
+| About & Contact Pages | ✅ |
+| EmailJS Contact Form | ✅ |
+| Framer Motion Animations | ✅ |
+| Next.js Image Optimization | ✅ |
+| SEO Metadata (all routes) | ✅ |
+| Loading Skeletons | ✅ |
+| Global Error Boundary | ✅ |
+| Custom 404 Page | ✅ |
+| Mobile-Responsive Navbar | ✅ |
 
 ---
 
-## Folder Structure Tree
+## Quick Start
+
+### Prerequisites
+- **Node.js** 20.x or later
+- **MongoDB** (local or [MongoDB Atlas](https://cloud.mongodb.com) free tier)
+- **Stripe** account ([free test mode](https://stripe.com))
+- **EmailJS** account ([free tier](https://www.emailjs.com)) *(optional — contact form only)*
+
+### Step-by-Step Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/nandakumar-nandu/LuxeGems.git
+cd LuxeGems
+
+# 2. Install all dependencies
+npm install
+
+# 3. Set up environment variables
+cp .env.example .env
+# → Open .env and fill in every value (see .env.example for instructions)
+
+# 4. Start MongoDB (if running locally)
+# macOS/Linux:
+mongod --dbpath /data/db
+# Windows: MongoDB runs as a service after installation
+
+# 5. Seed the database with sample jewelry products
+npx ts-node --project tsconfig.json -e "import('./lib/db/seed').then(m => m.seedProducts())"
+# OR with tsx:
+npx tsx lib/db/seed.ts
+
+# 6. Start the development server
+npm run dev
+
+# 7. Open in your browser
+open http://localhost:3000
+```
+
+### Test Stripe Payments Locally
+
+```bash
+# Install Stripe CLI
+# https://stripe.com/docs/stripe-cli
+
+# Login
+stripe login
+
+# Forward webhooks to your local dev server
+stripe listen --forward-to localhost:3000/api/webhook
+
+# Copy the webhook signing secret printed in the terminal → paste into STRIPE_WEBHOOK_SECRET in .env
+```
+
+Use Stripe test card `4242 4242 4242 4242` with any future expiry and any CVC.
+
+---
+
+## Folder Structure
+
 ```text
 LuxeGems/
-├── app/                  # Next.js App Router Pages and Layouts
-│   ├── favicon.ico
-│   ├── fonts/            # Local asset font binaries
-│   ├── globals.css       # Core Tailwind CSS and base styles
-│   ├── layout.tsx        # Global page wrapper with Navbar and Footer
-│   ├── page.tsx          # Homepage containing the premium Hero section
-│   ├── cart/             # Cart Pages
-│   │   └── page.tsx      # Full cart page with tabular items summary
-│   ├── checkout/         # Checkout Pages
-│   │   └── page.tsx      # Multi-step checkout form layout
-│   └── shop/             # Shop Pages
-│       └── page.tsx      # Static shop gallery page with mock products
-├── components/           # Reusable UI component layers
-│   ├── layout/           # Global structural components
-│   │   ├── Footer.tsx    # Global Footer links and newsletter area
-│   │   └── Navbar.tsx    # Glassmorphism sticky Navbar
-│   └── ui/               # Atomic components
-│       ├── Badge.tsx     # Custom pill tags
-│       ├── Button.tsx    # Customizable buttons with luxury gold styling
-│       ├── Card.tsx      # Premium container panels
-│       ├── FormField.tsx # Reusable labeled input field
-│       └── ProductCard.tsx # Premium product card component
-├── hooks/                # Custom React hooks (empty for now)
-├── lib/                  # Shareable configurations and helper functions
-│   └── utils.ts          # Utility functions (cn, formatPrice)
-├── public/               # Static assets
-├── types/                # TypeScript type structures and interfaces
-│   └── index.ts          # Common types (Product, User, CartItem, Order)
-├── .env                  # Local secrets and config variables (ignored by Git)
-├── .env.example          # Documentation template for configuration
-├── .gitignore            # Version control exclusions
-├── package.json          # Dependency scripts
-├── tsconfig.json         # TypeScript compiler configurations
+├── app/                          # Next.js App Router — all pages and layouts
+│   ├── layout.tsx                # Root layout: fonts, Navbar, Footer, ErrorBoundary
+│   ├── page.tsx                  # Homepage — animated hero section
+│   ├── template.tsx              # Page transition fade wrapper
+│   ├── error.tsx                 # Global error boundary page
+│   ├── not-found.tsx             # Custom 404 page
+│   ├── about/
+│   │   ├── layout.tsx            # SEO metadata for About
+│   │   └── page.tsx              # Brand story, values, team
+│   ├── cart/
+│   │   ├── layout.tsx            # SEO metadata (noindex)
+│   │   └── page.tsx              # Full cart page (responsive table/card)
+│   ├── checkout/
+│   │   ├── layout.tsx            # SEO metadata (noindex)
+│   │   └── page.tsx              # 3-step checkout form (Zod + RHF)
+│   ├── contact/
+│   │   ├── layout.tsx            # SEO metadata for Contact
+│   │   └── page.tsx              # Contact form (EmailJS)
+│   ├── order-success/
+│   │   ├── layout.tsx            # SEO metadata (noindex)
+│   │   └── page.tsx              # Order confirmation + tracking ID
+│   ├── products/[id]/
+│   │   ├── layout.tsx            # Dynamic SEO metadata (generateMetadata)
+│   │   └── page.tsx              # Product detail — image, price, add to cart
+│   ├── shop/
+│   │   ├── layout.tsx            # SEO metadata for Shop
+│   │   ├── loading.tsx           # Skeleton loading state
+│   │   └── page.tsx              # Product catalog with category filters
+│   ├── track-order/
+│   │   ├── layout.tsx            # SEO metadata for Track Order
+│   │   ├── loading.tsx           # Skeleton loading state
+│   │   └── page.tsx              # Order tracking with status stepper
+│   └── api/
+│       ├── products/
+│       │   ├── route.ts          # GET /api/products?category=&featured=
+│       │   └── [id]/route.ts     # GET /api/products/:id
+│       ├── checkout/route.ts     # POST — create Stripe session + pending order
+│       ├── orders/[trackingId]/route.ts  # GET — look up order by tracking ID
+│       └── webhook/route.ts      # POST — Stripe webhook handler
+├── components/
+│   ├── layout/
+│   │   ├── Navbar.tsx            # Sticky navbar with hamburger mobile menu
+│   │   └── Footer.tsx            # Footer with links and newsletter
+│   └── ui/
+│       ├── Badge.tsx             # Status pill tags
+│       ├── Button.tsx            # Gold, outline, ghost variants
+│       ├── Card.tsx              # Container panel
+│       ├── CartDrawer.tsx        # Slide-in cart panel (Framer Motion)
+│       ├── ErrorBoundary.tsx     # Class-based React error boundary
+│       ├── FormField.tsx         # Labeled input with Zod error display
+│       ├── OrderStatusSkeleton.tsx  # Loading skeleton for order tracking
+│       ├── ProductCard.tsx       # Product card with hover animation
+│       ├── ProductCardSkeleton.tsx  # Loading skeleton for catalog
+│       └── Toast.tsx             # Toast notification system
+├── lib/
+│   ├── context/CartContext.tsx   # Cart state (useReducer), CartProvider
+│   ├── db/
+│   │   ├── mongoose.ts           # MongoDB connection with caching
+│   │   └── seed.ts               # 8 sample jewelry products seeder
+│   ├── models/
+│   │   ├── Order.ts              # Mongoose Order schema
+│   │   └── Product.ts            # Mongoose Product schema
+│   └── utils.ts                  # cn(), formatPrice()
+├── types/index.ts                 # Shared TypeScript interfaces
+├── .env.example                   # Environment variable template
+├── .env                           # Local secrets (gitignored)
+├── CHANGELOG.md                   # Version history
+├── SCREENTOUR.md                  # Screen-by-screen UI documentation
+└── WALKTHROUGH.md                 # Technical implementation walkthrough
 ```
 
 ---
 
-## Project Folder Architecture
+## App Routes
+
+| Route | Type | Description |
+|---|---|---|
+| `/` | Static | Homepage — hero section |
+| `/shop` | Client | Product catalog with category filters |
+| `/products/[id]` | Dynamic | Product detail page |
+| `/cart` | Client | Full cart page |
+| `/checkout` | Client | 3-step checkout form |
+| `/order-success` | Client | Order confirmation + tracking ID |
+| `/track-order` | Client | Order status lookup |
+| `/about` | Static | Brand story and team |
+| `/contact` | Client | Contact form (EmailJS) |
+| `/api/products` | Dynamic API | GET all products, optional filters |
+| `/api/products/[id]` | Dynamic API | GET single product |
+| `/api/checkout` | Dynamic API | POST — create Stripe session |
+| `/api/orders/[trackingId]` | Dynamic API | GET order by tracking ID |
+| `/api/webhook` | Dynamic API | Stripe webhook receiver |
+
+---
+
+## Architecture Diagrams
+
+### Folder Architecture
 ```mermaid
 graph TD
-    Root[d/projects/LuxeGems]
+    Root[LuxeGems/]
     Root --> App[app/]
     Root --> Comp[components/]
     Root --> Lib[lib/]
     Root --> Types[types/]
-    Root --> Hooks[hooks/]
-    Root --> Pub[public/]
 
-    App --> Layout["layout.tsx (Navbar & Footer)"]
-    App --> Page["page.tsx (Hero Section)"]
-    App --> Shop["shop/page.tsx (Shop Page)"]
-    App --> CSS[globals.css]
+    App --> Pages["Pages & Layouts<br/>(homepage, shop, cart,<br/>checkout, about, contact,<br/>track-order, order-success)"]
+    App --> API["api/<br/>(products, checkout,<br/>orders, webhook)"]
+    App --> AppGlobal["Global Files<br/>(layout.tsx, error.tsx,<br/>not-found.tsx, template.tsx)"]
 
-    Comp --> UI[ui/]
-    Comp --> LayoutComp[layout/]
+    Comp --> Layout["layout/<br/>(Navbar, Footer)"]
+    Comp --> UI["ui/<br/>(Button, Card, Badge,<br/>ProductCard, CartDrawer,<br/>FormField, Toast,<br/>ErrorBoundary, Skeletons)"]
 
-    UI --> Button[Button.tsx]
-    UI --> Card[Card.tsx]
-    UI --> Badge[Badge.tsx]
-    UI --> ProductCard[ProductCard.tsx]
-
-    LayoutComp --> Navbar[Navbar.tsx]
-    LayoutComp --> Footer[Footer.tsx]
-
-    Lib --> Utils[utils.ts]
-    Types --> TypeIndex[index.ts]
+    Lib --> Context["context/<br/>(CartContext)"]
+    Lib --> DB["db/<br/>(mongoose.ts, seed.ts)"]
+    Lib --> Models["models/<br/>(Product.ts, Order.ts)"]
+    Lib --> Utils["utils.ts"]
 ```
 
----
+### App Routes Flowchart
+```mermaid
+flowchart LR
+    HOME["/  Homepage"] --> SHOP["/shop  Catalog"]
+    SHOP --> DETAIL["/products/id  Detail"]
+    DETAIL --> CART_DRAWER["Cart Drawer<br/>(slide-in)"]
+    CART_DRAWER --> CART["/cart  Full Cart"]
+    CART --> CHECKOUT["/checkout  3-Step Form"]
+    CHECKOUT --> STRIPE["Stripe Checkout"]
+    STRIPE --> SUCCESS["/order-success"]
+    SUCCESS --> TRACK["/track-order"]
+    HOME --> ABOUT["/about"]
+    HOME --> CONTACT["/contact"]
+```
 
-## Component Hierarchy Architecture
+### Component Hierarchy
 ```mermaid
 graph TD
-    subgraph Global Layout
-        Layout[layout.tsx] --> Navbar[Navbar]
-        Layout --> Footer[Footer]
-    end
+    Layout["RootLayout (app/layout.tsx)"]
+    Layout --> EB["ErrorBoundary"]
+    Layout --> CP["CartProvider"]
+    Layout --> TP["ToastProvider"]
+    Layout --> NV["Navbar"]
+    Layout --> CD["CartDrawer"]
+    Layout --> MAIN["main (page content)"]
+    Layout --> FT["Footer"]
 
-    subgraph Shop Page
-        Shop[shop/page.tsx] --> ProductCard[ProductCard]
-    end
+    NV --> LG["Logo"]
+    NV --> NAV["Nav Links"]
+    NV --> HB["Hamburger Menu (mobile)"]
+    NV --> CART_BTN["Cart Button + Badge"]
+
+    CD --> CL["Cart Item List"]
+    CD --> QTY["Quantity Controls"]
+    CD --> PROC["Proceed to Checkout Button"]
+
+    MAIN --> SHOP_PAGE["ShopPage"]
+    SHOP_PAGE --> FILTERS["Filter Bar"]
+    SHOP_PAGE --> GRID["Product Grid"]
+    GRID --> PC["ProductCard (×N)"]
+    PC --> ATB["Add to Cart Button"]
 ```
 
----
-
-## Planned App Routes & Flowchart
-This diagram outlines the target URL structure and user navigation pages planned for development:
-
+### Payment Sequence Diagram
 ```mermaid
-graph TD
-    Home["Home (/)"]
-    Collections["Collections (/collections)"]
-    ProductDetail["Product Detail (/product/:id)"]
-    Cart["Cart (/cart)"]
-    Checkout["Checkout (/checkout)"]
-    OrderConfirm["Order Confirmation (/order-confirmation/:id)"]
-    Dashboard["User Dashboard (/dashboard)"]
-    Admin["Admin Catalog (/admin)"]
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant API as Next.js API
+    participant DB as MongoDB
+    participant Stripe
 
-    Home --> Collections
-    Home --> ProductDetail
-    Collections --> ProductDetail
-    ProductDetail --> Cart
-    Cart --> Checkout
-    Checkout --> OrderConfirm
-    Home --> Dashboard
-    Home --> Admin
+    User->>Frontend: Clicks "Place Order" on Checkout Step 3
+    Frontend->>API: POST /api/checkout (cart items + customer info)
+    API->>DB: Create Order (status: pending, trackingId: LG-XXXX-XXXX)
+    API->>Stripe: Create Checkout Session (line_items, success_url, cancel_url)
+    Stripe-->>API: { url: "https://checkout.stripe.com/..." }
+    API-->>Frontend: { checkoutUrl }
+    Frontend->>Stripe: Redirect to Stripe Checkout
+    User->>Stripe: Enters payment details
+    Stripe->>API: POST /api/webhook (checkout.session.completed)
+    API->>DB: Update Order status → "processing"
+    Stripe->>Frontend: Redirect to /order-success?session_id=...
+    Frontend->>User: Show tracking ID + confirmation
 ```
 
-## Product Schema Database ER Diagram
-This diagram represents the structural database properties modeled for each catalog product:
-
+### Database ER Diagram
 ```mermaid
 erDiagram
     PRODUCT {
-        ObjectId _id PK "Unique Mongoose Identifier"
-        String name "Jewelry Display Name"
-        Number price "Price in cents (e.g. 245000)"
-        String category "Category catalog name (Rings, Necklaces, etc.)"
-        String image "Visual Unsplash Image asset URL"
-        String description "Craftsmanship design notes specifications"
-        Number stock "Quantity inventory level count"
-        Boolean isNew "New arrival badge display status"
-        Boolean isFeatured "Signature featured product highlight flag"
-        Date createdAt "Database entry creation timestamp"
-        Date updatedAt "Database entry modification timestamp"
+        ObjectId _id PK
+        string name
+        number price
+        string category
+        string image
+        string description
+        number stock
+        boolean isNew
+        boolean isFeatured
+        Date createdAt
     }
+
+    ORDER {
+        ObjectId _id PK
+        string trackingId UK
+        string stripeSessionId
+        string status
+        number totalAmount
+        Date createdAt
+        array items
+        object customerInfo
+        object shippingAddress
+    }
+
+    ORDER_ITEM {
+        ObjectId productId FK
+        string name
+        number price
+        string image
+        number quantity
+    }
+
+    ORDER ||--o{ ORDER_ITEM : contains
+    ORDER_ITEM }o--|| PRODUCT : references
 ```
 
----
-
-## API Endpoints Reference
-The backend exposes the following API routes for querying the catalog database, managing checkouts, and tracking orders:
-
-| Method | Path | Query Parameters / Payload | Description | Response Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **GET** | `/api/products` | `category` (optional filter)<br>`featured` (optional boolean) | Fetches a list of products from MongoDB filtered by criteria. | `200 OK` (list)<br>`500 Error` |
-| **GET** | `/api/products/[id]` | None | Fetches detailed attributes for a single product. | `200 OK` (details)<br>`404 Not Found`<br>`500 Error` |
-| **POST** | `/api/checkout` | JSON checkout payload (items, customerInfo, shippingAddress, totalAmount) | Creates a pending order and constructs a Stripe Checkout session. | `200 OK` (session URL)<br>`400 Bad Request`<br>`500 Error` |
-| **POST** | `/api/webhook` | Raw Stripe signature headers and body payload | Receives asynchronous event callbacks from Stripe to update order status. | `200 OK` (processed)<br>`400 Invalid Signature`<br>`500 Server Error` |
-| **GET** | `/api/orders/[trackingId]` | None | Retrieves customer order details, status, and shipping logs. | `200 OK` (order data)<br>`404 Not Found`<br>`500 Error` |
-
----
-
-## Shopping Cart State Transitions
-This state machine illustrates the user actions and mutations that drive the global cart state:
-
+### User Journey Diagram
 ```mermaid
-stateDiagram-v2
-    [*] --> Empty : Cart Initialized
-    
-    Empty --> HasItems : ADD_TO_CART (First Item)
-    
-    HasItems --> HasItems : ADD_TO_CART (Additional Items)
-    HasItems --> HasItems : UPDATE_QUANTITY (Clamped quantity >= 1)
-    HasItems --> HasItems : REMOVE_FROM_CART (Items remaining)
-    
-    HasItems --> Empty : REMOVE_FROM_CART (Last item removed)
-    HasItems --> Empty : CLEAR_CART
-    
-    HasItems --> Checkout : Click Proceed to Checkout
-    Checkout --> Empty : Order Processed Successfully
-    Checkout --> HasItems : Exit Checkout / Modify Items
+journey
+    title LuxeGems Shopping Journey
+    section Discovery
+      Visit homepage: 5: User
+      Browse hero animations: 4: User
+    section Browsing
+      Navigate to /shop: 5: User
+      Filter by category: 4: User
+      View product detail: 5: User
+    section Cart
+      Add to cart: 5: User
+      Open cart drawer: 4: User
+      Review items in cart page: 4: User
+    section Checkout
+      Fill contact info: 3: User
+      Enter shipping address: 3: User
+      Review order: 4: User
+      Place order via Stripe: 5: User
+    section Post-Purchase
+      View order confirmation: 5: User
+      Track order status: 4: User
 ```
-
-## Checkout Flow Sequence
-This sequence diagram details the interaction steps of a customer proceeding from their Cart page through form validations to completing order checkout:
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Client as Client / User
-    participant Cart as Cart Page (/cart)
-    participant Form as Checkout Form (/checkout)
-    participant State as Cart Context State
-
-    Client->>Cart: View Selected Items
-    Cart->>Client: Display Tabular Items & Subtotal
-    Client->>Cart: Click "Proceed to Checkout"
-    Cart->>Form: Redirect to Checkout Page
-    Note over Form: Step 1: Contact Specifications
-    Client->>Form: Input Name, Email, Phone
-    Form->>Form: Validate Input fields (Zod)
-    Client->>Form: Click "Next Step"
-    Note over Form: Step 2: Shipping Location
-    Client->>Form: Input Address, City, State, ZIP
-    Form->>Form: Validate Location fields (Zod)
-    Client->>Form: Click "Next Step"
-    Note over Form: Step 3: Review Order
-    Form->>State: Fetch Cart Items & Total Amount
-    Form->>Client: Present Client Data & Items Summary
-    Client->>Form: Click "Place Order"
-    Form->>Form: Dispatch Final Submit
-    Form->>State: Dispatch CLEAR_CART Action
-    State-->>Form: Cart Emptied
-    Form->>Client: Render Success Confirmation Panel
-```
-
----
-
-## Secure Payment and Webhook Flow
-This sequence diagram illustrates the lifecycle of a secure credit card charge processing via the Stripe Checkout portal, asynchronous signature verification callbacks, and MongoDB status updates:
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Client as Frontend Client
-    participant API as Checkout API (/api/checkout)
-    participant Stripe as Stripe Checkout Hosted Page
-    participant Webhook as Webhook Listener (/api/webhook)
-    participant DB as MongoDB Database Order Table
-
-    Client->>API: POST Checkout request (items, customerInfo, shippingAddress, totalAmount)
-    API->>API: Generate unique trackingId (format: LG-XXXX-XXXX)
-    API->>DB: Save pending order with status: "Pending" and stripeSessionId
-    API->>Stripe: Create checkout session
-    Stripe-->>API: Return Checkout session details & redirect URL
-    API-->>Client: Return session redirect URL
-    Client->>Stripe: Redirect and enter card details
-    Stripe->>Stripe: Process charge
-    Note over Stripe: Payment Captured Successfully
-    Stripe-->>Client: Redirect to /order-success?trackingId=LG-XXXX-XXXX
-    Stripe->>Webhook: Async POST webhook event (checkout.session.completed)
-    Webhook->>Webhook: Verify signature using STRIPE_WEBHOOK_SECRET
-    alt Signature Valid
-        Webhook->>DB: Find order by stripeSessionId and update status to "Paid"
-        DB-->>Webhook: Order updated
-        Webhook-->>Stripe: Respond HTTP 200 OK
-    else Signature Invalid
-        Webhook-->>Stripe: Respond HTTP 400 Bad Request
-    end
-```
-
----
-
-## Setup Instructions
-
-### Prerequisites
-- Node.js version 18.x or 20.x
-- npm or another preferred package manager
-
-### Installation Steps
-1. Clone or access the workspace root `d:\projects\LuxeGems`.
-2. Install the necessary dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up the local environment file:
-   - Copy `.env.example` to create `.env`:
-     ```bash
-     cp .env.example .env
-     ```
-   - Supply placeholder credentials for database URIs and Stripe.
-4. Run the local development server:
-   ```bash
-   npm run dev
-   ```
-5. Open your browser and navigate to `http://localhost:3000` to view the homepage.
-
----
-
-## What is Coming Next
-In the next session (**Commit 10**), we will implement:
-- User Authentication (credentials or passwordless login).
-- Protected pages for order tracking and user settings.
-- Administrator control panels.
 
 ---
 
 ## Lighthouse Score Targets
 
-These are the target Lighthouse scores for each key public page. They were established with the optimizations shipped in Commit 9 (Next.js `<Image>`, skeleton loading states, SEO metadata layouts, and error boundaries).
+These targets were established after the Commit 9 image and SEO optimizations.
 
 | Page | Performance | Accessibility | Best Practices | SEO |
 |------|-------------|---------------|----------------|-----|
@@ -314,28 +378,49 @@ These are the target Lighthouse scores for each key public page. They were estab
 | `/contact` | ≥ 90 | ≥ 95 | ≥ 95 | 100 |
 | `/track-order` | ≥ 85 | ≥ 90 | ≥ 90 | 100 |
 
-### Key Optimizations Applied (Commit 9)
+### Key Optimizations Applied
 
 | Optimization | Lighthouse Impact |
 |---|---|
-| `<Image>` with `fill` + `sizes` | Reduces LCP and eliminates bandwidth waste from oversized images |
-| `<Image priority>` on LCP element | Removes render-blocking delay on the hero product photo |
-| `remotePatterns` in `next.config.mjs` | Enables WebP/AVIF conversion for all Unsplash images |
-| Skeleton loading states | Eliminates Cumulative Layout Shift (CLS) during async fetches |
-| Per-route metadata layouts | Enables accurate title/description tags → improves click-through from search |
-| `robots: noindex` on cart/checkout | Prevents transactional pages from consuming crawl budget |
-| `generateMetadata` on product pages | Gives each product a unique, indexed title + description for Google Shopping |
-
-### How to Run Lighthouse Locally
+| `<Image>` with `fill` + `sizes` | Reduces LCP; eliminates oversized image downloads |
+| `<Image priority>` on LCP hero | Removes render-blocking delay on product hero photo |
+| WebP/AVIF via `remotePatterns` | 30–50% smaller image file sizes |
+| Skeleton loading states | Eliminates Cumulative Layout Shift (CLS) |
+| Per-route metadata layouts | Unique title/description → better click-through from search |
+| `robots: noindex` on cart/checkout | Protects crawl budget |
+| `generateMetadata` on product pages | Per-product Google Shopping indexing |
 
 ```bash
-# 1. Build and serve the production bundle
+# Run Lighthouse locally against production build:
 npm run build
 npx serve .next -l 3000
-
-# 2. In Chrome DevTools → Lighthouse tab → Run analysis
-# OR use the CLI:
 npx lighthouse http://localhost:3000 --view
 ```
 
-> **Note**: Always run Lighthouse against the production build (`npm run build`), not the dev server. Dev server scores will be significantly lower due to unminified assets and HMR overhead.
+> **Note**: Always run Lighthouse against `npm run build`, not the dev server.
+
+---
+
+## Deployment (Vercel)
+
+```bash
+# 1. Push to GitHub
+git push origin main
+
+# 2. Import repository at https://vercel.com/new
+# 3. Add all environment variables from .env to Vercel Dashboard → Settings → Environment Variables
+# 4. Set NEXT_PUBLIC_APP_URL to your Vercel deployment URL
+# 5. Add your Vercel URL as a Stripe webhook endpoint in the Stripe Dashboard
+# 6. Deploy!
+```
+
+---
+
+## What Is Coming Next
+
+Future planned improvements (post-v1.0.0):
+- User Authentication (Next-Auth or Clerk)
+- Admin dashboard for order and product management
+- Wishlist / Favorites functionality
+- Product reviews and ratings
+- Search with Algolia or MongoDB text search

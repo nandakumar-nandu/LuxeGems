@@ -11,24 +11,29 @@ LuxeGems Store is designed to provide clients with a premium digital salon where
 
 ## Planned Features
 
-### 🚧 Catalog & Filtering (Coming Soon)
-- Dynamic browsing of Collections, Rings, Necklaces, and Earrings.
-- Filter catalog by metal type (Gold, Platinum), price range, and gemstone.
-- Dynamic search bar matching product names and descriptions.
+## Implemented Features
 
-### 🚧 Cart & Checkout (Coming Soon)
-- Full client-side cart states allowing additions, quantity edits, and item removals.
-- Integration of ring sizing selections.
-- Persistent cart storage using local hooks.
+### ✅ Catalog & Filtering
+- Dynamic browsing of collections by category: All, Rings, Necklaces, Earrings.
+- Real-time API filtering via `/api/products?category=`.
+- Skeleton loading states prevent layout shift while data fetches.
 
-- Secure credit card checkouts and webhook processing.
+### ✅ Cart & Checkout
+- Full client-side cart powered by `useReducer` + React Context.
+- `CartDrawer` slides in from the right with Framer Motion.
+- Full cart page with responsive card layout (mobile) and table layout (desktop).
+- Multi-step checkout form with Zod + React Hook Form validation.
+- Stripe Checkout integration with webhook order status updates.
 
-### 🚧 User Authentication (Coming Soon)
+### ✅ Order Tracking
+- Unique tracking ID generated per order (`LG-XXXX-XXXX` format).
+- Order status stepper (Pending → Processing → Shipped → Delivered).
+- API-driven status lookup by tracking ID.
+
+### 🔮 User Authentication (Future)
 - Auth integration (credentials or passwordless login).
 - Protected pages for order tracking and user settings.
 - Administrator control panels.
-
-- Persistent order tracking dashboard and stepper.
 
 ---
 
@@ -170,3 +175,41 @@ The checkout process utilizes a secure, multi-step validation form at `/checkout
 ### Error Boundaries and 404
 1. **`/app/error.tsx`**: Global client error boundary — shows "Concierge Interrupted" screen with Retry and Return Home actions; logs errors to the console.
 2. **`/app/not-found.tsx`**: Custom 404 — "Masterpiece Not Found" brand-consistent empty state with a catalog redirect CTA.
+
+---
+
+## Mobile Responsiveness
+
+### Navbar Hamburger Menu
+The Navbar now includes a fully functional mobile menu:
+1. **Hamburger Toggle**: A `☰`/`✕` icon button replaces the horizontal nav on screens below `md` (768px). It is implemented with `useState(false)` to control open/closed state.
+2. **Dropdown Panel**: When open, renders a full-width dropdown below the header containing all nav links vertically + a "Sign In" button. Clicking any link automatically closes the menu via `onClick={() => setMobileMenuOpen(false)}`.
+3. **Active Link Detection**: Updated to use `pathname.startsWith(link.href)` so `/about`, `/contact`, and `/shop/...` sub-paths correctly highlight the parent link.
+4. **Cart Badge**: Now conditionally renders — `{totalCartItems > 0 && ...}` — to avoid showing a "0" badge. Shows "9+" when count exceeds 9.
+
+### Cart Page Mobile Layout
+The cart page table was non-functional on mobile (columns would overflow). The fix:
+1. **Mobile card layout** (`lg:hidden`): Each cart item renders as a horizontal flex card — image on the left, name/price/controls on the right. The quantity stepper and remove button are inline with the line total.
+2. **Desktop table** (`hidden lg:block`): Preserves the original 4-column table layout on large screens. Both views share the same data/handlers from CartContext.
+
+### Checkout Step Indicator Mobile Fix
+The step indicator labels could overflow on very small screens:
+1. **Label visibility**: Step labels use `hidden xs:block` — hidden on `xs` (< 480px), shown on `sm` and above.
+2. **Mobile fallback text**: A `<p>` element below the indicator (`xs:hidden`) shows the current step name (e.g. "Step 2 — Shipping Address") for screens too narrow to show labels in the indicator.
+3. **Dot sizing**: Step circles shrink from `h-8 w-8` to `h-7 w-7` on mobile.
+
+---
+
+## ErrorBoundary Component
+
+`components/ui/ErrorBoundary.tsx` is a reusable React class component (the only class component in the project — required because hooks cannot implement `componentDidCatch`):
+
+1. **`getDerivedStateFromError`**: Called when any child throws during render. Sets `{ hasError: true }` which triggers the fallback UI on the next render pass.
+2. **`componentDidCatch`**: Logs the error and its component stack to the console. This is where you would add Sentry or DataDog reporting.
+3. **`handleReset`**: Clears the error state, allowing React to re-attempt rendering the children tree — effectively a "retry" without a full page reload.
+4. **Custom fallback prop**: Parent components can pass their own `fallback` JSX to override the default branded error UI.
+5. **Dev error display**: In `NODE_ENV=development`, the raw error message is displayed in a red code block below the recovery buttons to aid debugging.
+
+The ErrorBoundary is used in two places:
+- **Root layout** (`app/layout.tsx`): Wraps `<main>` — catches errors from any page
+- **Available as a component**: `import { ErrorBoundary } from "@/components/ui/ErrorBoundary"` for wrapping specific sections

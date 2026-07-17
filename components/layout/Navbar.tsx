@@ -1,13 +1,13 @@
 /**
  * 📁 components/layout/Navbar.tsx
  * 📁 Global Navbar component.
- * 🎨 Sticky navigation bar featuring luxurious branding, SVG icons, and a glassmorphism blur.
+ * 🎨 Sticky navigation bar with responsive hamburger menu, glassmorphism blur, and cart badge.
  * 🔗 Imports Next.js routing helpers, Tailwind style helpers, and atomic buttons.
  */
 
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -15,17 +15,18 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/lib/context/CartContext";
 
 /**
- * 🎯 Renders the main responsive navigation header for the website.
- * Contains placeholders for store search, authentication, and shopping bag count.
+ * 🎯 Renders the main responsive navigation header.
+ * Includes a hamburger mobile menu that expands to show all nav links.
  *
  * @returns The rendered Navbar element
  */
 export default function Navbar() {
   // ⚙️ Retrieve the current URL pathname for active link styling
   const pathname = usePathname();
-
   // ⚙️ Retrieve cart elements to show count and open side drawer panel
   const { items, setCartOpen } = useCart();
+  // ⚙️ Mobile menu open/close toggle state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // ⚙️ Calculate the total number of physical products in the cart
   const totalCartItems = items.reduce((total, item) => total + item.quantity, 0);
@@ -34,17 +35,16 @@ export default function Navbar() {
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Shop", href: "/shop" },
-    { label: "About", href: "/#about" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-100 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        
+
         {/* BRAND LOGO AREA */}
-        {/* 🎨 Custom elegant typography for luxury jewelry branding */}
-        <Link href="/" className="flex items-center gap-2 group">
-          {/* Elegant diamond SVG icon */}
+        <Link href="/" className="flex items-center gap-2 group" onClick={() => setMobileMenuOpen(false)}>
           <svg
             className="h-6 w-6 text-amber-600 transition-transform duration-500 group-hover:rotate-45"
             viewBox="0 0 24 24"
@@ -63,11 +63,10 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* PRIMARY NAVIGATION LINKS */}
-        {/* 🎨 Horizontal list with clean text size and letter spacing */}
+        {/* PRIMARY NAVIGATION LINKS — hidden on mobile, shown on md+ */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => {
-            const isActive = link.href === "/" ? pathname === "/" : pathname === link.href;
+            const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.label}
@@ -88,41 +87,78 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* ACTION ITEMS (Search, Account, Shopping Bag) */}
-        <div className="flex items-center gap-4">
-          {/* User Account placeholder */}
-          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" aria-label="Account Account">
+        {/* ACTION ITEMS */}
+        <div className="flex items-center gap-3">
+          {/* Account link — hidden on smallest breakpoint */}
+          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" aria-label="Sign In">
             Sign In
           </Button>
 
-          {/* Cart Status and Count display */}
+          {/* Cart Bag icon with count badge */}
           <button
             onClick={() => setCartOpen(true)}
             className="relative p-2 text-neutral-700 hover:text-amber-600 transition-colors focus:outline-none"
             aria-label="Shopping Bag"
           >
-            {/* Bag Icon SVG */}
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              viewBox="0 0 24 24"
-            >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
               />
             </svg>
-            {/* Shopping cart count badge */}
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-600 text-[9px] font-bold text-white font-sans">
-              {totalCartItems}
-            </span>
+            {totalCartItems > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-600 text-[9px] font-bold text-white font-sans">
+                {totalCartItems > 9 ? "9+" : totalCartItems}
+              </span>
+            )}
+          </button>
+
+          {/* Hamburger toggle — shown only on mobile */}
+          <button
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="md:hidden p-2 text-neutral-700 hover:text-amber-600 transition-colors focus:outline-none"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileMenuOpen ? (
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
         </div>
-
       </div>
+
+      {/* MOBILE DROPDOWN MENU — slides down on open */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-neutral-100 bg-white/95 backdrop-blur-sm px-4 pb-4 pt-2 space-y-1">
+          {navLinks.map((link) => {
+            const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "block py-3 text-sm font-medium uppercase tracking-widest border-b border-neutral-50 font-sans",
+                  isActive ? "text-amber-600" : "text-neutral-700 hover:text-amber-600"
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <div className="pt-2">
+            <Button variant="outline" size="sm" className="w-full border-neutral-200">
+              Sign In
+            </Button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

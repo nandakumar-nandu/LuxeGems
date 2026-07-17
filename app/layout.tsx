@@ -12,6 +12,7 @@ import Footer from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/context/CartContext";
 import { CartDrawer } from "@/components/ui/CartDrawer";
 import { ToastProvider } from "@/components/ui/Toast";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import "./globals.css";
 
 // 🎨 Premium Serif Font for luxury typography headings
@@ -63,10 +64,12 @@ export default function RootLayout({
             {/* GLOBAL CART DRAWER PANEL */}
             <CartDrawer />
 
-            {/* PRIMARY VIEWPORT CONTAINER */}
-            <main className="flex-grow">
-              {children}
-            </main>
+            {/* PRIMARY VIEWPORT CONTAINER — wrapped in ErrorBoundary to prevent white screens */}
+            <ErrorBoundary>
+              <main className="flex-grow">
+                {children}
+              </main>
+            </ErrorBoundary>
 
             {/* GLOBAL FOOTER */}
             <Footer />

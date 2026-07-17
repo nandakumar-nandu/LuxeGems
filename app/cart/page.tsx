@@ -77,83 +77,80 @@ export default function CartPage() {
         ) : (
           /* POPULATED CART WORKSPACE GRID */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            {/* LEFT AREA: TABLE VIEW OF PRODUCTS */}
-            <div className="lg:col-span-8 overflow-x-auto">
-              <table className="w-full min-w-[600px] border-collapse text-left text-neutral-900">
-                <thead>
-                  <tr className="border-b border-neutral-200 pb-4 text-xs font-semibold uppercase tracking-wider text-neutral-400 font-sans">
-                    <th className="py-4 pr-4">Product Details</th>
-                    <th className="py-4 px-4 text-center">Quantity</th>
-                    <th className="py-4 px-4 text-right">Price</th>
-                    <th className="py-4 pl-4 text-right">Total</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-100">
-                  {items.map((item) => (
-                    <tr key={item.id} className="align-middle">
-                      {/* Product Thumbnail & Title details */}
-                      <td className="py-6 pr-4 flex items-center gap-4">
-                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm border border-neutral-100 bg-neutral-50">
-                          {/* ⚡ Fixed 80×80px dimensions eliminate CLS in table cell context */}
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={80}
-                            height={80}
-                            className="h-full w-full object-cover object-center"
-                          />
+            {/* LEFT AREA: RESPONSIVE CART ITEMS LIST */}
+            <div className="lg:col-span-8">
+              {/* Mobile card layout — shown on sm and below */}
+              <div className="space-y-4 lg:hidden">
+                {items.map((item) => (
+                  <div key={item.id} className="flex gap-4 p-4 border border-neutral-100 rounded-sm bg-white">
+                    <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm border border-neutral-100 bg-neutral-50">
+                      <Image src={item.image} alt={item.name} width={80} height={80} className="h-full w-full object-cover object-center" />
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <h3 className="font-serif text-sm font-semibold text-neutral-800 leading-snug">{item.name}</h3>
+                      <p className="text-xs text-neutral-500 font-sans">{formatPrice(item.price)} each</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center rounded-sm border border-neutral-200 bg-white">
+                          <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2.5 py-1.5 text-neutral-500 hover:text-neutral-900 text-sm">-</button>
+                          <span className="px-2 text-xs font-semibold text-neutral-800">{item.quantity}</span>
+                          <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2.5 py-1.5 text-neutral-500 hover:text-neutral-900 text-sm">+</button>
                         </div>
-                        <div className="space-y-1">
-                          <h3 className="font-serif text-sm font-semibold text-neutral-800 leading-snug">
-                            {item.name}
-                          </h3>
-                          <button
-                            onClick={() => removeFromCart(item.id)}
-                            className="text-xs text-neutral-400 hover:text-red-600 transition-colors flex items-center gap-1 focus:outline-none pt-1"
-                            aria-label="Remove item"
-                          >
-                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm font-semibold text-neutral-900 font-sans">{formatPrice(item.price * item.quantity)}</span>
+                          <button onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-red-600 transition-colors" aria-label="Remove item">
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                             </svg>
-                            Remove
                           </button>
                         </div>
-                      </td>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-                      {/* Quantity Incrementor controls */}
-                      <td className="py-6 px-4">
-                        <div className="flex items-center justify-center rounded-sm border border-neutral-200 w-24 mx-auto bg-white">
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="px-2.5 py-1.5 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
-                          >
-                            -
-                          </button>
-                          <span className="px-2 text-xs font-semibold text-neutral-800 select-none">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="px-2.5 py-1.5 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </td>
-
-                      {/* Unit Price */}
-                      <td className="py-6 px-4 text-right font-sans text-sm text-neutral-600">
-                        {formatPrice(item.price)}
-                      </td>
-
-                      {/* Total price for line item */}
-                      <td className="py-6 pl-4 text-right font-sans text-sm font-semibold text-neutral-900">
-                        {formatPrice(item.price * item.quantity)}
-                      </td>
+              {/* Desktop table — hidden on mobile */}
+              <div className="hidden lg:block overflow-x-auto">
+                <table className="w-full min-w-[600px] border-collapse text-left text-neutral-900">
+                  <thead>
+                    <tr className="border-b border-neutral-200 pb-4 text-xs font-semibold uppercase tracking-wider text-neutral-400 font-sans">
+                      <th className="py-4 pr-4">Product Details</th>
+                      <th className="py-4 px-4 text-center">Quantity</th>
+                      <th className="py-4 px-4 text-right">Price</th>
+                      <th className="py-4 pl-4 text-right">Total</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-100">
+                    {items.map((item) => (
+                      <tr key={item.id} className="align-middle">
+                        <td className="py-6 pr-4 flex items-center gap-4">
+                          <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm border border-neutral-100 bg-neutral-50">
+                            <Image src={item.image} alt={item.name} width={80} height={80} className="h-full w-full object-cover object-center" />
+                          </div>
+                          <div className="space-y-1">
+                            <h3 className="font-serif text-sm font-semibold text-neutral-800 leading-snug">{item.name}</h3>
+                            <button onClick={() => removeFromCart(item.id)} className="text-xs text-neutral-400 hover:text-red-600 transition-colors flex items-center gap-1 focus:outline-none pt-1" aria-label="Remove item">
+                              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                              </svg>
+                              Remove
+                            </button>
+                          </div>
+                        </td>
+                        <td className="py-6 px-4">
+                          <div className="flex items-center justify-center rounded-sm border border-neutral-200 w-24 mx-auto bg-white">
+                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2.5 py-1.5 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 transition-colors">-</button>
+                            <span className="px-2 text-xs font-semibold text-neutral-800 select-none">{item.quantity}</span>
+                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2.5 py-1.5 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 transition-colors">+</button>
+                          </div>
+                        </td>
+                        <td className="py-6 px-4 text-right font-sans text-sm text-neutral-600">{formatPrice(item.price)}</td>
+                        <td className="py-6 pl-4 text-right font-sans text-sm font-semibold text-neutral-900">{formatPrice(item.price * item.quantity)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             {/* RIGHT AREA: ORDER SUMMARY SIDEBAR PANEL */}
