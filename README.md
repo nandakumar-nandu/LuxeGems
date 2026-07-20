@@ -8,9 +8,32 @@
 
 **LuxeGems Store** is a production-ready, full-stack jewelry e-commerce platform built with Next.js 14 App Router, MongoDB, Stripe payments, and Framer Motion animations. It delivers an immersive, premium shopping experience from product browsing through order tracking.
 
-![LuxeGems Homepage](./public/screenshots/homepage.png)
-![LuxeGems Shop](./public/screenshots/shop.png)
-![LuxeGems Cart](./public/screenshots/cart.png)
+<table table-layout="fixed" width="100%">
+  <tr>
+    <td align="center" width="33%">
+      <strong>Homepage</strong><br/>
+      <img src="./public/screenshots/homepage.png" alt="Homepage" />
+    </td>
+    <td align="center" width="33%">
+      <strong>Shop Catalog</strong><br/>
+      <img src="./public/screenshots/shop.png" alt="Shop Catalog" />
+    </td>
+    <td align="center" width="33%">
+      <strong>Cart Drawer</strong><br/>
+      <img src="./public/screenshots/cart.png" alt="Cart Drawer" />
+    </td>
+  </tr>
+</table>
+
+<details>
+  <summary>🎥 Loop Video Walkthrough (Placeholder)</summary>
+  <br/>
+  <p align="center">
+    <em>Commit your recorded .mp4 file to <code>public/screenshots/walkthrough.mp4</code> to display it here.</em>
+    <video src="./public/screenshots/walkthrough.mp4" controls width="100%" muted autoplay loop></video>
+  </p>
+</details>
+
 
 > 🚀 **Live Demo**: https://www.luxegems.kpebble.com
 
