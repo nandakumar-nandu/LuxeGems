@@ -8,7 +8,11 @@
 
 **LuxeGems Store** is a production-ready, full-stack jewelry e-commerce platform built with Next.js 14 App Router, MongoDB, Stripe payments, and Framer Motion animations. It delivers an immersive, premium shopping experience from product browsing through order tracking.
 
-> 🚀 **Live Demo**: [https://luxegems.vercel.app](https://luxegems.vercel.app) *(placeholder — update after deploying)*
+![LuxeGems Homepage](./public/screenshots/homepage.png)
+![LuxeGems Shop](./public/screenshots/shop.png)
+![LuxeGems Cart](./public/screenshots/cart.png)
+
+> 🚀 **Live Demo**: https://www.luxegems.kpebble.com
 
 ---
 
