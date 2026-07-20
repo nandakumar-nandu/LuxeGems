@@ -20,14 +20,16 @@ import { readMockProducts } from "@/lib/db/mockDb";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  let id = "";
   try {
     // 1. ⚙️ Connect: Establish secure connection to MongoDB via cached pool
     await connectToDatabase();
 
     // 2. ⚙️ Extract ID: Retrieve target product ID from request parameters
-    const { id } = params;
+    const resolvedParams = await params;
+    id = resolvedParams.id;
 
     if (!id) {
       return NextResponse.json(
@@ -66,7 +68,7 @@ export async function GET(
     return NextResponse.json(product, { status: 200 });
   } catch (error) {
     // 7. ⚙️ Error Handler: Check for invalid ObjectId formats or other server faults
-    console.error(`❌ GET /api/products/${params.id} handler error:`, error);
+    console.error(`❌ GET /api/products/${id} handler error:`, error);
     return NextResponse.json(
       { error: "Server encountered an error retrieving product details" },
       { status: 500 }

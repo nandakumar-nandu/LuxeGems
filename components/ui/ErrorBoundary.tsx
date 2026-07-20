@@ -106,6 +106,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             >
               Retry
             </button>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a
               href="/"
               className="px-6 py-2.5 rounded-sm border border-neutral-300 text-neutral-700 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-50 transition-colors font-sans"

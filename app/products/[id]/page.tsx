@@ -7,7 +7,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/context/CartContext";
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/Button";
 
 interface Product {
   _id: string;
+  id?: string;
   name: string;
   price: number;
   category: string;
@@ -33,8 +34,8 @@ interface Product {
  * @param context - Dynamic route parameters containing target product ID
  * @returns The rendered Product Detail page markup
  */
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
@@ -64,7 +65,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             const allCategoryProducts = (await relatedRes.json()) as Product[];
             // Filter out current product and take at most 3 items
             const filtered = allCategoryProducts
-              .filter((p) => p._id !== productData._id)
+              .filter((p) => (p._id || p.id) !== (productData._id || productData.id))
               .slice(0, 3);
             setRelatedProducts(filtered);
           }
@@ -93,7 +94,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     if (!product) return;
     for (let i = 0; i < quantity; i++) {
       addToCart({
-        id: product._id,
+        id: product._id || product.id || "",
         name: product.name,
         price: product.price,
         image: product.image,
@@ -273,8 +274,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedProducts.map((related) => (
                 <ProductCard
-                  key={related._id}
-                  id={related._id}
+                  key={related._id || related.id}
+                  id={related._id || related.id || ""}
                   name={related.name}
                   price={related.price}
                   image={related.image}

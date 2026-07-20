@@ -4,7 +4,7 @@
   ⚙️ Full setup guide, architecture diagrams, routes, and project overview.
 -->
 
-# LuxeGems Store
+# <img src="./public/logo.svg" alt="LuxeGems" height="48" />
 
 **LuxeGems Store** is a production-ready, full-stack jewelry e-commerce platform built with Next.js 14 App Router, MongoDB, Stripe payments, and Framer Motion animations. It delivers an immersive, premium shopping experience from product browsing through order tracking.
 
@@ -240,11 +240,11 @@ LuxeGems/
 ### Folder Architecture
 ```mermaid
 graph TD
-    Root[LuxeGems/]
-    Root --> App[app/]
-    Root --> Comp[components/]
-    Root --> Lib[lib/]
-    Root --> Types[types/]
+    Root["LuxeGems/"]
+    Root --> App["app/"]
+    Root --> Comp["components/"]
+    Root --> Lib["lib/"]
+    Root --> Types["types/"]
 
     App --> Pages["Pages & Layouts<br/>(homepage, shop, cart,<br/>checkout, about, contact,<br/>track-order, order-success)"]
     App --> API["api/<br/>(products, checkout,<br/>orders, webhook)"]
@@ -311,16 +311,16 @@ sequenceDiagram
     participant DB as MongoDB
     participant Stripe
 
-    User->>Frontend: Clicks "Place Order" on Checkout Step 3
+    User->>Frontend: Clicks 'Place Order' on Checkout Step 3
     Frontend->>API: POST /api/checkout (cart items + customer info)
     API->>DB: Create Order (status: pending, trackingId: LG-XXXX-XXXX)
     API->>Stripe: Create Checkout Session (line_items, success_url, cancel_url)
-    Stripe-->>API: { url: "https://checkout.stripe.com/..." }
+    Stripe-->>API: { url: 'https://checkout.stripe.com/...' }
     API-->>Frontend: { checkoutUrl }
     Frontend->>Stripe: Redirect to Stripe Checkout
     User->>Stripe: Enters payment details
     Stripe->>API: POST /api/webhook (checkout.session.completed)
-    API->>DB: Update Order status → "processing"
+    API->>DB: Update Order status to Paid
     Stripe->>Frontend: Redirect to /order-success?session_id=...
     Frontend->>User: Show tracking ID + confirmation
 ```
@@ -329,7 +329,7 @@ sequenceDiagram
 ```mermaid
 erDiagram
     PRODUCT {
-        ObjectId _id PK
+        ObjectId id PK
         string name
         number price
         string category
@@ -342,7 +342,7 @@ erDiagram
     }
 
     ORDER {
-        ObjectId _id PK
+        ObjectId id PK
         string trackingId UK
         string stripeSessionId
         string status

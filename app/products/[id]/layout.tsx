@@ -14,15 +14,16 @@
 import type { Metadata } from "next";
 
 interface LayoutProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
   children: React.ReactNode;
 }
 
 export async function generateMetadata({ params }: LayoutProps): Promise<Metadata> {
   try {
+    const resolvedParams = await params;
     // Attempt to fetch real product data for accurate per-product metadata
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/products/${params.id}`,
+      `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/products/${resolvedParams.id}`,
       { next: { revalidate: 3600 } } // ⚡ Cache for 1h — product data is semi-static
     );
     if (res.ok) {

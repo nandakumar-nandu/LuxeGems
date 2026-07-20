@@ -13,6 +13,7 @@ import { ProductCard } from "@/components/ui/ProductCard";
 
 interface DBProduct {
   _id: string;
+  id?: string;
   name: string;
   price: number;
   category: string;
@@ -152,8 +153,8 @@ export default function ShopPage() {
           <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <ProductCard
-                key={product._id}
-                id={product._id}
+                key={product._id || product.id}
+                id={product._id || product.id || ""}
                 name={product.name}
                 price={product.price}
                 image={product.image}

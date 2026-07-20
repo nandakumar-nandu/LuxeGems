@@ -20,14 +20,16 @@ import { readMockOrders } from "@/lib/db/mockDb";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { trackingId: string } }
+  { params }: { params: Promise<{ trackingId: string }> }
 ) {
+  let trackingId = "";
   try {
     // 1. ⚙️ Connect: Establish secure connection to database via cached pool helper
     await connectToDatabase();
 
     // 2. ⚙️ Extract Param: Retrieve search tracking identifier from route parameters
-    const { trackingId } = params;
+    const resolvedParams = await params;
+    trackingId = resolvedParams.trackingId;
 
     if (!trackingId) {
       return NextResponse.json(
@@ -43,7 +45,7 @@ export async function GET(
 
       if (!mockOrder) {
         return NextResponse.json(
-          { error: "Order tracking ID not found in local JSON database" },
+          { error: "Order tracking ID not found in local catalog file" },
           { status: 404 }
         );
       }
@@ -51,10 +53,10 @@ export async function GET(
       return NextResponse.json(mockOrder, { status: 200 });
     }
 
-    // 4. ⚙️ Query: Retrieve the order by trackingId field
+    // 4. ⚙️ Query: Search for order document by unique tracking ID string
     const order = await Order.findOne({ trackingId });
 
-    // 5. ⚙️ Validate: If order is missing, return HTTP 404 Not Found error
+    // 5. ⚙️ Validate: If order is not found in database, return HTTP 404 Not Found
     if (!order) {
       return NextResponse.json(
         { error: "Order tracking ID not found in catalog" },
@@ -66,7 +68,7 @@ export async function GET(
     return NextResponse.json(order, { status: 200 });
   } catch (error) {
     // 7. ⚙️ Error Handler: Capture internal database errors and respond with HTTP 500
-    console.error(`❌ GET /api/orders/${params.trackingId} handler error:`, error);
+    console.error(`❌ GET /api/orders/${trackingId} handler error:`, error);
     return NextResponse.json(
       { error: "Server encountered an error retrieving order tracking details" },
       { status: 500 }
