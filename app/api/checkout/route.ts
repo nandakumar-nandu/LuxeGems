@@ -39,6 +39,16 @@ function generateTrackingId(): string {
   return `LG-${block1}-${block2}`;
 }
 
+interface IncomingOrderItem {
+  productId?: string;
+  id?: string;
+  _id?: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+}
+
 /**
  * 🎯 POST
  * 🎯 Handles incoming HTTP POST requests to initialize order checkouts.
@@ -72,7 +82,13 @@ export async function POST(request: NextRequest) {
 
       const newOrder = {
         trackingId,
-        items,
+        items: items.map((item: IncomingOrderItem) => ({
+          productId: item.productId || item.id || item._id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: item.quantity,
+        })),
         customerInfo,
         shippingAddress,
         totalAmount,
@@ -128,7 +144,13 @@ export async function POST(request: NextRequest) {
     // 6. ⚙️ Save Pending Order to Database
     const newOrder = {
       trackingId,
-      items,
+      items: items.map((item: IncomingOrderItem) => ({
+        productId: item.productId || item.id || item._id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        quantity: item.quantity,
+      })),
       customerInfo,
       shippingAddress,
       totalAmount,
