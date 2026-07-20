@@ -30,11 +30,8 @@ if (!process.env.MONGODB_URI) {
   }
 }
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || "";
 
-if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable inside .env");
-}
 
 // 📦 Extend Node.js global interface to allow attaching a cached mongoose object and fallback states
 declare global {
@@ -70,6 +67,13 @@ export async function connectToDatabase(): Promise<mongoose.Mongoose> {
 
   // 2. If mock database is currently active, return Mongoose mock instance
   if (cached.isMockDb) {
+    return mongoose;
+  }
+
+  // 2b. If MONGODB_URI is empty, fall back to mock database directly
+  if (!MONGODB_URI) {
+    cached.isMockDb = true;
+    console.warn("⚠️ MONGODB_URI is not set. Falling back to local file-based database.");
     return mongoose;
   }
 
